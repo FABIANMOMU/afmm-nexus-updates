@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro de Mando — Fabián Morales · Ocaso</title>
+<style>
+:root {
+  --bg:#08090f; --bg2:#0e1117; --bg3:#141824; --border:#1e2535;
+  --blue:#2563eb; --blue2:#1d4ed8; --green:#16a34a; --green2:#15803d;
+  --purple:#7c3aed; --orange:#ea580c; --pink:#db2777; --red:#dc2626;
+  --yellow:#d97706; --teal:#0891b2;
+  --text:#e2e8f0; --muted:#64748b; --accent:#38bdf8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:100;overflow-x:auto;}
+.nav-brand{font-weight:800;font-size:.95rem;color:#fff;padding:16px 18px 16px 0;border-right:1px solid var(--border);margin-right:6px;white-space:nowrap;flex-shrink:0;}
+.nav-brand span{color:var(--blue);}
+.tab{padding:17px 13px;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;flex-shrink:0;}
+.tab:hover{color:var(--text);}
+.tab.active{color:#fff;border-bottom-color:var(--blue);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;padding-left:12px;}
+.nav-clock{font-size:.75rem;color:var(--muted);}
+.nav-clock b{color:var(--text);}
+.dot-live{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite;margin-right:4px;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* PAGES */
+.page{display:none;max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
+.page.active{display:block;}
+
+/* TIPOGRAFÍA */
+.ph{margin-bottom:24px;}
+.ph h2{font-size:1.35rem;font-weight:700;color:#fff;}
+.ph p{color:var(--muted);font-size:.85rem;margin-top:4px;}
+.sec-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px;padding-left:2px;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;}
+.card-t{font-size:.85rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.card-s{font-size:.73rem;color:var(--muted);}
+
+/* STAT CARD */
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--c,var(--blue));}
+.stat-n{font-size:2rem;font-weight:800;color:#fff;}
+.stat-l{font-size:.73rem;color:var(--muted);margin-top:4px;}
+
+/* BADGES */
+.badge{display:inline-block;font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:.3px;}
+.bg-green{background:#166534;color:#86efac;}
+.bg-blue{background:#1e3a8a;color:#93c5fd;}
+.bg-orange{background:#7c2d12;color:#fdba74;}
+.bg-red{background:#7f1d1d;color:#fca5a5;}
+.bg-gray{background:#1e293b;color:#94a3b8;}
+.bg-purple{background:#4c1d95;color:#c4b5fd;}
+.bg-yellow{background:#713f12;color:#fde68a;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;border:none;transition:all .15s;font-family:inherit;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{background:var(--blue2);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-green:hover{background:var(--green2);}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{background:#b91c1c;}
+.btn-purple{background:var(--purple);color:#fff;}
+.btn-orange{background:var(--orange);color:#fff;}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--blue);color:#fff;}
+.btn-sm{padding:6px 13px;font-size:.73rem;}
+.btn-xs{padding:4px 10px;font-size:.7rem;}
+.btn-full{width:100%;justify-content:center;}
+
+/* FORMS */
+label.lbl{font-size:.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;}
+input,textarea,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 13px;font-size:.82rem;font-family:inherit;outline:none;transition:border-color .15s;}
+input:focus,textarea:focus,select:focus{border-color:var(--blue);}
+textarea{resize:vertical;min-height:80px;}
+.fg{margin-bottom:14px;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* ALERT */
+.alert{background:#172033;border:1px solid #2563eb44;border-radius:10px;padding:13px 16px;font-size:.8rem;color:#93c5fd;margin-bottom:20px;display:flex;gap:10px;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:.8rem;}
+th{text-align:left;padding:9px 13px;color:var(--muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);}
+td{padding:11px 13px;border-bottom:1px solid #0e1520;vertical-align:middle;}
+tr:hover td{background:#0e1520;}
+
+/* STEP */
+.step{display:flex;gap:14px;padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;}
+.step-n{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex-shrink:0;}
+.step-n.done{background:var(--green);}
+.step-n.warn{background:var(--orange);}
+.step-t{font-weight:700;font-size:.85rem;color:#fff;margin-bottom:3px;}
+.step-b{font-size:.76rem;color:var(--muted);line-height:1.6;}
+.step-b a{color:var(--accent);text-decoration:none;}
+
+/* TOOL BTN */
+.tool-btn{display:flex;align-items:center;gap:13px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:15px 16px;cursor:pointer;text-decoration:none;transition:all .15s;color:var(--text);}
+.tool-btn:hover{border-color:var(--blue);background:#151e30;transform:translateY(-2px);}
+.tool-icon{font-size:1.7rem;flex-shrink:0;}
+.tool-label{font-weight:700;font-size:.85rem;color:#fff;}
+.tool-desc{font-size:.71rem;color:var(--muted);margin-top:2px;}
+
+/* OUTPUT */
+.output{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.81rem;line-height:1.7;min-height:60px;white-space:pre-wrap;}
+
+/* SEP */
+.sep{border:none;border-top:1px solid var(--border);margin:22px 0;}
+
+/* PIPELINE CARD */
+.pip-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:9px;display:flex;align-items:center;gap:13px;transition:border-color .15s;}
+.pip-card:hover{border-color:var(--blue);}
+.pip-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0;}
+.pip-info{flex:1;min-width:0;}
+.pip-name{font-weight:700;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pip-meta{font-size:.72rem;color:var(--muted);margin-top:2px;}
+.pip-actions{display:flex;gap:6px;flex-shrink:0;}
+
+/* PROGRESS BAR */
+.prog-wrap{background:#0d1117;border-radius:4px;height:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:4px;transition:width .4s;}
+
+/* COPY RESULT */
+.copy-result{background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.copy-platform{background:#0d1117;padding:9px 14px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--border);}
+.copy-text{padding:13px 14px;font-size:.8rem;line-height:1.75;white-space:pre-wrap;}
+.copy-actions{padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px;}
+
+/* HOY TOCA */
+.hoy-wrap{background:linear-gradient(135deg,#0f1e3a,#141824);border:1px solid #2563eb55;border-radius:14px;padding:22px;margin-bottom:22px;}
+.hoy-top{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.hoy-badge{background:var(--blue);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:2px;padding:4px 10px;border-radius:20px;text-transform:uppercase;}
+.hoy-h{font-size:1.1rem;font-weight:700;}
+.hoy-sub{font-size:.78rem;color:var(--muted);}
+.paso-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s;}
+.paso-item:hover{background:rgba(37,99,235,.1);border-color:var(--blue);}
+.paso-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex-shrink:0;}
+.pn-b{background:rgba(37,99,235,.25);color:#60a5fa;}
+.pn-g{background:rgba(22,163,74,.2);color:#4ade80;}
+.pn-y{background:rgba(217,119,6,.2);color:#fbbf24;}
+.pn-p{background:rgba(124,58,237,.2);color:#a78bfa;}
+.paso-info{flex:1;}
+.paso-accion{font-size:.87rem;font-weight:700;}
+.paso-det{font-size:.72rem;color:var(--muted);margin-top:2px;}
+.paso-tag{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:12px;white-space:nowrap;background:rgba(37,99,235,.15);color:#60a5fa;}
+
+/* STATUS */
+.status-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:var(--bg3);border-radius:8px;margin-bottom:7px;font-size:.8rem;}
+
+/* SCRIPT BOX */
+.script-blk{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.script-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;cursor:pointer;}
+.script-hdr:hover{background:rgba(37,99,235,.05);}
+.script-titulo{font-size:.85rem;font-weight:600;}
+.script-cuando{font-size:.72rem;color:var(--muted);}
+.script-bdy{display:none;padding:0 16px 16px;}
+.script-bdy.open{display:block;}
+.script-txt{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.78rem;color:var(--muted);line-height:1.75;white-space:pre-wrap;user-select:all;cursor:text;margin-top:8px;}
+
+/* SUBTABS (Pipeline+Cartera) */
+.subtab-bar{display:flex;gap:0;margin-bottom:22px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;}
+.subtab{padding:8px 20px;font-size:.8rem;font-weight:700;color:var(--muted);cursor:pointer;border-radius:7px;transition:all .15s;border:none;background:transparent;font-family:inherit;}
+.subtab.active{background:var(--blue);color:#fff;}
+.subtab:hover:not(.active){color:var(--text);}
+
+/* TOAST */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:#16a34a;color:#fff;font-weight:700;font-size:.8rem;padding:9px 22px;border-radius:100px;transition:transform .25s;z-index:999;pointer-events:none;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+/* CRM ADMINS — tabla real */
+.crm-track{width:100%;min-width:110px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:.4rem .5rem;font-size:.76rem;font-family:inherit;}
+.crm-track-notes{min-width:160px;min-height:36px;resize:vertical;}
+.crm-score-alto{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(22,163,74,.12);color:#4ade80;}
+.crm-score-medio{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(234,179,8,.12);color:#fbbf24;}
+.crm-phone{color:#60a5fa;text-decoration:none;font-weight:600;}
+.crm-phone:hover{text-decoration:underline;}
+#crmTable td{padding:.6rem .75rem;border-bottom:1px solid var(--border);vertical-align:top;}
+#crmTable tr:hover td{background:rgba(255,255,255,.02);}
+</style>
+</head>
+<body>
+<div id="toast">✓ Copiado</div>
+
+<!-- BANNER MIGRACION — solo visible la primera vez en localhost -->
+<div id="banner-migracion" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#7c3aed,#2563eb);color:#fff;padding:.75rem 1.5rem;align-items:center;gap:1rem;font-size:.9rem;box-shadow:0 2px 12px rgba(0,0,0,.4);">
+  <span style="font-size:1.3rem">📦</span>
+  <span style="flex:1"><b>Sistema actualizado a v1.2</b> — Si tenias datos en la version anterior, importalos ahora para no perderlos.</span>
+  <button onclick="importarDatos()" style="background:#fff;color:#7c3aed;border:none;border-radius:6px;padding:.4rem 1rem;font-weight:700;cursor:pointer;white-space:nowrap">📂 Importar datos</button>
+  <button onclick="exportarDatos()" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:.4rem 1rem;font-weight:600;cursor:pointer;white-space:nowrap">⬇ Exportar backup</button>
+  <button onclick="cerrarBannerMigracion()" style="background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;padding:0 .3rem" title="Cerrar">✕</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Centro de Mando <span>Fabián</span></div>
+  <div class="tab active" onclick="goTab('hoy',this)">🏠 Hoy</div>
+  <div class="tab" onclick="goTab('pipeline',this)">👥 Pipeline &amp; Cartera</div>
+  <div class="tab" onclick="goTab('botia',this)">🤖 Bot IA</div>
+  <div class="tab" onclick="goTab('captacion',this)">📣 Captación</div>
+  <div class="tab" onclick="goTab('scraper',this)">🕷️ Scraper</div>
+  <div class="tab" onclick="goTab('admins',this)">🏢 CRM Admins</div>
+  <div class="nav-right">
+    <div class="nav-clock"><span class="dot-live"></span><b id="navClock"></b></div>
+  </div>
+</nav>
+
+<!-- ══ HOY ══ -->
+<div class="page active" id="page-hoy">
+  <div class="ph"><h2>🏠 Panel del día</h2><p>Estado del sistema y tareas de hoy</p></div>
+
+  <!-- HOY TOCA -->
+  <div class="sec-label">Hoy toca</div>
+  <div class="hoy-wrap">
+    <div class="hoy-top">
+      <div class="hoy-badge" id="hoyBadge">—</div>
+      <div><div class="hoy-h" id="hoyTitulo">Cargando...</div><div class="hoy-sub" id="hoyFecha"></div></div>
+    </div>
+    <div id="hoyPasos"></div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="sec-label">Estado del CRM</div>
+  <div class="g4" style="margin-bottom:24px;">
+    <div class="stat" style="--c:#ea580c;"><div class="stat-n" id="kpiPend">—</div><div class="stat-l">Pendientes de llamar</div></div>
+    <div class="stat" style="--c:#2563eb;"><div class="stat-n" id="kpiContact">—</div><div class="stat-l">Contactados</div></div>
+    <div class="stat" style="--c:#7c3aed;"><div class="stat-n" id="kpiCita">—</div><div class="stat-l">Con cita</div></div>
+    <div class="stat" style="--c:#16a34a;"><div class="stat-n" id="kpiCerr">—</div><div class="stat-l">Cerrados este mes</div></div>
+  </div>
+
+  <!-- ESTADO SISTEMA + ACCESOS -->
+  <div class="g2" style="margin-bottom:24px;">
+    <div>
+      <div class="sec-label">Estado del sistema <span style="font-size:.62rem;color:#334155;font-weight:400;text-transform:none;letter-spacing:0;">(se comprueba al abrir)</span></div>
+
+      <!-- Vapi -->
+      <div class="status-row">
+        <span>🤖 Bot IA — saldo Vapi</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span id="vapi-wallet-icon" class="step-n warn" style="width:18px;height:18px;font-size:.6rem;line-height:1;">!</span>
+          <strong id="vapiSaldo" style="font-size:.82rem;color:#fbbf24;">Cargando...</strong>
+        </div>
+      </div>
+
+      <div class="status-row">
+        <span>⚡ n8n Railway</span>
+        <span class="badge bg-gray" id="n8n-status">⟳ Comprobando</span>
+      </div>
+      <div class="status-row">
+        <span>🌐 fabianteasegura.com</span>
+        <span class="badge bg-gray" id="web-status">⟳ Comprobando</span>
+      </div>
+      <div class="status-row">
+        <span>💬 WhatsApp Business API</span>
+        <span class="badge bg-yellow">Token 60d · exp. Jul 2026</span>
+      </div>
+      <div class="status-row">
+        <span>📡 Twilio +34</span>
+        <span class="badge bg-orange">⚠ En aprobación</span>
+      </div>
+      <div class="status-row">
+        <span>🏢 CRM Administradores</span>
+        <span class="badge bg-green">✓ GitHub Pages</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="checkEstadoSistema()">⟳ Comprobar ahora</button>
+    </div>
+
+    <div>
+      <div class="sec-label">Accesos rápidos</div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <a class="tool-btn" href="https://docs.google.com/spreadsheets/d/1w7bPWCR5UqrMl7mkc1OS85xSsw1UWaUHl6oLVGchliI" target="_blank">
+          <div class="tool-icon">🕷️</div><div><div class="tool-label">CRM Idealista — Sheets</div><div class="tool-desc">Leads Zaragoza y Sevilla</div></div>
+        </a>
+        <a class="tool-btn" href="https://docs.google.com/spreadsheets/d/195UtBzn4e-f5nzm6bKcA_2F_oMqyVMXuNZSZ4oudKNc" target="_blank">
+          <div class="tool-icon">📋</div><div><div class="tool-label">CRM Citas Bot — Sheets</div><div class="tool-desc">Citas captadas por el bot IA</div></div>
+        </a>
+        <a class="tool-btn" href="https://fabianmomu.github.io/crm-administradores/" target="_blank">
+          <div class="tool-icon">🏢</div><div><div class="tool-label">CRM Administradores</div><div class="tool-desc">Fincas · contraseña: fm2026</div></div>
+        </a>
+        <a class="tool-btn" href="https://primary-production-55dc.up.railway.app" target="_blank">
+          <div class="tool-icon">⚡</div><div><div class="tool-label">n8n — Automatizaciones</div><div class="tool-desc">Railway · flujos activos</div></div>
+        </a>
+        <a class="tool-btn" href="https://app.vapi.ai" target="_blank">
+          <div class="tool-icon">📞</div><div><div class="tool-label">Vapi — Bot IA</div><div class="tool-desc">Wallet · campañas · historial</div></div>
+        </a>
+        <a class="tool-btn" href="fabian-panel-control.html" target="_blank">
+          <div class="tool-icon">🔐</div><div><div class="tool-label">Panel de control</div><div class="tool-desc">Credenciales guardadas en Bitwarden</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS CLAUDE (colapsable) -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;" onclick="toggleScriptsSection()">
+      <div>
+        <div style="font-size:.85rem;font-weight:700;color:#fff;">📋 Scripts para Claude</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">Copia, rellena los datos entre [corchetes] y pégalo en Claude</div>
+      </div>
+      <span id="scripts-arrow" style="color:var(--muted);font-size:1rem;">▸</span>
+    </div>
+    <div id="scripts-section" style="display:none;padding:0 18px 18px;">
+      <div id="scripts-manual"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PIPELINE + CARTERA ══ -->
+<div class="page" id="page-pipeline">
+  <div class="ph"><h2>👥 Pipeline &amp; Cartera</h2><p>Gestiona prospectos y clientes con póliza</p></div>
+
+  <!-- SUBTABS -->
+  <div class="subtab-bar">
+    <button class="subtab active" id="sub-tab-crm" onclick="showPipTab('crm')">👥 Pipeline CRM</button>
+    <button class="subtab" id="sub-tab-cartera" onclick="showPipTab('cartera')">📋 Cartera</button>
+  </div>
+
+  <!-- ── PANEL CRM ── -->
+  <div id="pip-crm-panel">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <div><span style="font-size:.8rem;color:var(--muted);">Pipeline de prospectos — sigue a cada contacto hasta cerrar la póliza</span></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+        <span id="sync-status" style="font-size:.75rem;color:#4ade80;">✓ Sheets conectado</span>
+        <button class="btn btn-ghost btn-sm" onclick="loadFromSheets()">⟳ Sincronizar Sheets</button>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-bottom:24px;">
+      <!-- AÑADIR -->
+      <div class="card">
+        <div class="card-t" style="margin-bottom:14px;">➕ Añadir contacto</div>
+        <div class="fr">
+          <div class="fg"><label class="lbl">Nombre</label><input id="s-nom" placeholder="Nombre Apellido"></div>
+          <div class="fg"><label class="lbl">Teléfono</label><input id="s-tel" placeholder="612 345 678"></div>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label class="lbl">Producto</label>
+            <select id="s-prod">
+              <option>Seguro Hogar</option><option>Seguro Vida</option><option>Seguro Coche</option>
+              <option>Seguro Decesos</option><option>Seguro Salud</option><option>Seguro Negocio</option>
+              <option>Seguro Comunidad</option><option>Impago Alquiler</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="lbl">Estado</label>
+            <select id="s-est">
+              <option value="pendiente">Pendiente llamar</option>
+              <option value="contactado">Contactado</option>
+              <option value="cita">Cita agendada</option>
+              <option value="cerrado">Cerrado ✓</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label class="lbl">Origen</label>
+          <select id="s-orig">
+            <option>Idealista (propio)</option><option>Bot IA llamadas</option><option>Formulario web</option>
+            <option>Instagram</option><option>Referido</option><option>Prospectos Delicias</option>
+            <option>Administradores fincas</option><option>Otro</option>
+          </select>
+        </div>
+        <div class="fg"><label class="lbl">Notas</label><input id="s-notas" placeholder="Interesado en hogar, llamar lunes..."></div>
+        <button class="btn btn-primary btn-full" onclick="addSeg()">Añadir al pipeline →</button>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+          <div style="flex:1;height:1px;background:#1e2535;"></div>
+          <span style="color:#475569;font-size:.72rem;">o</span>
+          <div style="flex:1;height:1px;background:#1e2535;"></div>
+        </div>
+        <button class="btn btn-full" style="margin-top:10px;background:#4f46e5;color:#fff;font-weight:700;font-size:.9rem;padding:13px;" onclick="abrirCitaDirecta()">📅 Tengo una cita — agendar ahora →</button>
+      </div>
+
+      <!-- RESUMEN -->
+      <div>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-t" style="margin-bottom:12px;">📊 Resumen del pipeline</div>
+          <div class="status-row"><span>Pendientes de llamar</span><span class="badge bg-orange" id="cnt-pend">0</span></div>
+          <div class="status-row"><span>Contactados</span><span class="badge bg-blue" id="cnt-cont">0</span></div>
+          <div class="status-row"><span>Con cita agendada</span><span class="badge bg-purple" id="cnt-cita">0</span></div>
+          <div class="status-row"><span>Cerrados</span><span class="badge bg-green" id="cnt-cerr">0</span></div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="exportSeg()">📥 Exportar</button>
+            <button class="btn btn-ghost btn-sm" onclick="if(confirm('¿Borrar todos los cerrados?'))limpiarCerrados()">🗑 Limpiar cerrados</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-t" style="margin-bottom:10px;">⭐ Post-venta rápido</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-bottom:10px;">A los 30 días → pide reseña. A los 60 → pide referido.</div>
+          <button class="btn btn-ghost btn-sm btn-full" onclick="goTab('captacion',document.querySelector('[onclick*=captacion]'));setTimeout(()=>document.getElementById('pv-section').scrollIntoView({behavior:'smooth'}),200)">Ver mensajes post-venta →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+      <select id="seg-filtro" onchange="renderSeg()" style="width:auto;padding:7px 12px;font-size:.78rem;">
+        <option value="">Todos</option>
+        <option value="pendiente">Pendientes</option>
+        <option value="contactado">Contactados</option>
+        <option value="cita">Con cita</option>
+        <option value="cerrado">Cerrados</option>
+      </select>
+      <input id="seg-search" placeholder="Buscar nombre..." oninput="renderSeg()" style="width:200px;padding:7px 12px;font-size:.78rem;">
+      <span style="margin-left:auto;font-size:.75rem;color:var(--muted);" id="seg-total-txt"></span>
+    </div>
+    <div id="seg-lista"></div>
+  </div>
+
+  <!-- ── PANEL CARTERA ── -->
+  <div id="pip-cartera-panel" style="display:none;">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <span style="font-size:.8rem;color:var(--muted);">Clientes activos con póliza — historial y vencimientos</span>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+        <span id="cartera-sync-status" style="font-size:.75rem;color:#4ade80;">✓ Sheets conectado</span>
+        <button class="btn btn-ghost btn-sm" onclick="carteraLoad()">⟳ Sincronizar</button>
+      </div>
+    </div>
+
+    <!-- KPIs Cartera -->
+    <div class="g4" style="margin-bottom:24px;">
+      <div class="card" style="text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#4ade80;" id="ck-total">—</div><div style="font-size:.75rem;color:var(--muted);">Clientes totales</div></div>
+      <div class="card" style="text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#60a5fa;" id="ck-activos">—</div><div style="font-size:.75rem;color:var(--muted);">Pólizas activas</div></div>
+      <div class="card" style="text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#fb923c;" id="ck-mes">—</div><div style="font-size:.75rem;color:var(--muted);">Vencen este mes</div></div>
+      <div class="card" style="text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#facc15;" id="ck-prox">—</div><div style="font-size:.75rem;color:var(--muted);">Vencen próximo mes</div></div>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-t" style="margin-bottom:16px;" id="cartera-form-title">➕ Añadir cliente a la cartera</div>
+      <div class="g2" style="gap:12px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <input id="ct-nombre" placeholder="Nombre completo *" />
+          <input id="ct-telefono" placeholder="Teléfono *" />
+          <input id="ct-alta" type="date" title="Fecha de alta" />
+          <div style="font-size:.7rem;color:var(--muted);margin-top:-6px;">📅 Fecha de alta (día que firmó contigo)</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <select id="ct-poliza">
+            <option value="">Tipo de póliza *</option>
+            <option>Hogar</option><option>Decesos</option><option>Vida</option>
+            <option>Auto</option><option>Accidentes</option><option>Salud</option>
+            <option>Responsabilidad Civil</option><option>Comercio</option><option>Otro</option>
+          </select>
+          <input id="ct-npoliza" placeholder="Nº de póliza" />
+          <input id="ct-vencimiento" type="date" title="Fecha de vencimiento" />
+          <div style="font-size:.7rem;color:var(--muted);margin-top:-6px;">🔄 Fecha de vencimiento (cuándo renueva)</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button id="cartera-save-btn" class="btn btn-green" onclick="carteraAdd()" style="min-width:160px;">💾 Guardar cliente</button>
+        <button id="cartera-cancel-btn" class="btn btn-ghost btn-sm" onclick="carteraLimpiarForm()" style="display:none;color:#fb923c;border-color:#fb923c;">✕ Cancelar edición</button>
+        <button class="btn btn-ghost btn-sm" onclick="carteraLimpiarForm()">✕ Limpiar</button>
+        <span id="cartera-save-status" style="font-size:.75rem;color:var(--muted);align-self:center;"></span>
+      </div>
+    </div>
+
+    <!-- BÚSQUEDA -->
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <input id="cartera-buscar" placeholder="🔍 Buscar por nombre o póliza..." oninput="carteraRender()" style="flex:1;min-width:200px;" />
+      <select id="cartera-filtro-poliza" style="width:160px;" onchange="carteraRender()">
+        <option value="">Todas las pólizas</option>
+        <option>Hogar</option><option>Decesos</option><option>Vida</option>
+        <option>Auto</option><option>Accidentes</option><option>Salud</option>
+      </select>
+      <select id="cartera-filtro-estado" style="width:150px;" onchange="carteraRender()">
+        <option value="">Todos los estados</option>
+        <option>Activa</option><option>Vence pronto</option><option>Vencida</option>
+      </select>
+    </div>
+    <div id="cartera-lista"></div>
+  </div>
+</div>
+
+<!-- ══ BOT IA ══ -->
+<div class="page" id="page-botia">
+  <div class="ph"><h2>🤖 Bot IA — Inteligencia Comercial</h2><p>Lanza campañas, clasifica leads en un clic y sabe exactamente a quién llamar hoy.</p></div>
+
+  <!-- AVISO TWILIO -->
+  <div style="background:#1a1400;border:1px solid #d9720033;border-radius:10px;padding:11px 16px;font-size:.78rem;color:#fbbf24;margin-bottom:16px;display:flex;gap:10px;align-items:center;">
+    ⚠️ <span><strong>Twilio +34 en aprobación regulatoria.</strong> El bot puede lanzar llamadas en cuanto el número esté activo. Usa "Llamada de prueba" para verificar la conexión con Vapi.</span>
+  </div>
+
+  <!-- BANNER CALIENTE -->
+  <div id="bot-hot-banner" style="display:none;background:linear-gradient(135deg,#2d1000,#1c0a00);border:2px solid #f59e0b;border-radius:14px;padding:16px 22px;margin-bottom:18px;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div style="font-size:2rem;line-height:1;">🔥</div>
+    <div style="flex:1;min-width:180px;">
+      <div id="bot-hot-txt" style="font-size:.95rem;font-weight:800;color:#f59e0b;"></div>
+      <div style="font-size:.73rem;color:#fcd34d;margin-top:3px;">Estos leads ya mostraron interés real — llámalos TÚ personalmente ahora</div>
+    </div>
+    <button onclick="botChip('caliente')" style="background:#f59e0b;color:#000;border:none;border-radius:9px;padding:10px 22px;font-size:.83rem;font-weight:800;cursor:pointer;white-space:nowrap;">Ver calientes →</button>
+  </div>
+
+  <!-- HERO LANZAR -->
+  <div style="background:linear-gradient(135deg,#0f1e3a,#141824);border:1px solid #2563eb44;border-radius:14px;padding:22px 26px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+    <div>
+      <div id="bot-pend-num" style="font-size:2.8rem;font-weight:800;color:#facc15;line-height:1;">0</div>
+      <div style="font-size:1rem;font-weight:700;color:#fff;margin-top:2px;">números pendientes de llamar</div>
+      <div id="bot-pend-sub" style="font-size:.78rem;color:var(--muted);margin-top:4px;">Carga números para empezar</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+      <button id="btn-lanzar" onclick="botToggle()" style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:14px 36px;font-size:.95rem;font-weight:800;cursor:pointer;">▶ LANZAR</button>
+      <div style="display:flex;gap:8px;">
+        <button id="btn-pause" onclick="botPause()" style="display:none;background:#d97706;color:#000;border:none;border-radius:7px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;">⏸ Pausar</button>
+        <button id="btn-stop" onclick="botStop()" style="display:none;background:var(--red);color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;">⏹ Detener</button>
+        <button id="btn-sync" onclick="botSyncResultados()" style="background:#7c3aed;color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;">🔄 Sincronizar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px;">
+    <div class="stat" style="--c:#f59e0b;"><div class="stat-n" id="bs-caliente" style="color:#f59e0b;font-size:2.1rem;">0</div><div class="stat-l">🔥 Calientes</div></div>
+    <div class="stat" style="--c:#22c55e;"><div class="stat-n" id="bs-cita" style="color:#22c55e;font-size:2.1rem;">0</div><div class="stat-l">✅ Citas</div></div>
+    <div class="stat" style="--c:#facc15;"><div class="stat-n" id="bs-pend" style="color:#facc15;font-size:2.1rem;">0</div><div class="stat-l">⏳ Pendientes</div></div>
+    <div class="stat" style="--c:#94a3b8;"><div class="stat-n" id="bs-total" style="color:#94a3b8;font-size:2.1rem;">0</div><div class="stat-l">📊 Total leads</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;">
+      <div id="bs-potencial" style="font-size:1.4rem;font-weight:800;color:#3b82f6;">0</div>
+      <div style="font-size:.67rem;color:var(--muted);margin-top:2px;">💙 Potenciales</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;">
+      <div id="bs-receptivo" style="font-size:1.4rem;font-weight:800;color:#06b6d4;">0</div>
+      <div style="font-size:.67rem;color:var(--muted);margin-top:2px;">🟢 Receptivos</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;">
+      <div id="bs-nocontesta" style="font-size:1.4rem;font-weight:800;color:#f97316;">0</div>
+      <div style="font-size:.67rem;color:var(--muted);margin-top:2px;">📵 No contesta</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;">
+      <div id="bs-bloq" style="font-size:1.4rem;font-weight:800;color:#6b7280;">0</div>
+      <div style="font-size:.67rem;color:var(--muted);margin-top:2px;">🚫 Bloqueados</div>
+    </div>
+  </div>
+
+  <!-- PROGRESO -->
+  <div id="bot-prog" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:15px 18px;margin-bottom:18px;">
+    <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:7px;">
+      <span id="bot-prog-txt">Preparando...</span><span id="bot-prog-pct">0%</span>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill" id="bot-prog-fill" style="width:0%"></div></div>
+    <div id="bot-prog-msg" style="margin-top:7px;font-size:.78rem;color:#a78bfa;"></div>
+  </div>
+
+  <div class="g2">
+    <!-- TABLA LEADS -->
+    <div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;">
+        <button data-chip="" onclick="botChip('')" id="chip-todos" style="padding:5px 13px;border-radius:20px;border:2px solid #334155;background:#1e293b;color:#e2e8f0;font-size:.72rem;font-weight:700;cursor:pointer;">📋 Todos</button>
+        <button data-chip="caliente" onclick="botChip('caliente')" id="chip-caliente" style="padding:5px 13px;border-radius:20px;border:1px solid #f59e0b44;background:#f59e0b11;color:#f59e0b;font-size:.72rem;font-weight:600;cursor:pointer;">🔥 Calientes</button>
+        <button data-chip="cita" onclick="botChip('cita')" id="chip-cita" style="padding:5px 13px;border-radius:20px;border:1px solid #22c55e44;background:#22c55e11;color:#22c55e;font-size:.72rem;font-weight:600;cursor:pointer;">✅ Citas</button>
+        <button data-chip="potencial" onclick="botChip('potencial')" id="chip-potencial" style="padding:5px 13px;border-radius:20px;border:1px solid #3b82f644;background:#3b82f611;color:#3b82f6;font-size:.72rem;font-weight:600;cursor:pointer;">💙 Potenciales</button>
+        <button data-chip="receptivo" onclick="botChip('receptivo')" id="chip-receptivo" style="padding:5px 13px;border-radius:20px;border:1px solid #06b6d444;background:#06b6d411;color:#06b6d4;font-size:.72rem;font-weight:600;cursor:pointer;">🟢 Receptivos</button>
+        <button data-chip="no_contesta" onclick="botChip('no_contesta')" id="chip-no_contesta" style="padding:5px 13px;border-radius:20px;border:1px solid #f9731644;background:#f9731611;color:#f97316;font-size:.72rem;font-weight:600;cursor:pointer;">📵 No contesta</button>
+        <button data-chip="pendiente" onclick="botChip('pendiente')" id="chip-pendiente" style="padding:5px 13px;border-radius:20px;border:1px solid #facc1544;background:#facc1511;color:#facc15;font-size:.72rem;font-weight:600;cursor:pointer;">⏳ Pendientes</button>
+        <input id="bot-search" placeholder="🔍 Buscar..." oninput="botRender()" style="margin-left:auto;padding:5px 11px;font-size:.73rem;width:140px;border-radius:20px;">
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <div style="display:grid;grid-template-columns:30px 148px 138px 58px 110px 168px;padding:8px 13px;background:#0d1117;font-size:.61rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--border);min-width:652px;">
+            <span>#</span><span>Teléfono</span><span>Estado</span><span>★</span><span>Próx. Acción</span><span style="text-align:center;">Clasificar — 1 clic</span>
+          </div>
+          <div id="bot-tbody" style="max-height:480px;overflow-y:auto;min-width:652px;"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-ghost btn-sm" onclick="botExport()">📥 Exportar CSV</button>
+        <button class="btn btn-ghost btn-sm" onclick="botResetHoy()">↺ Reintentar no contesta</button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:7px;font-size:.75rem;color:var(--muted);">
+          Pausa: <input type="number" id="bot-delay" value="15" min="5" max="120" style="width:48px;padding:5px;text-align:center;font-size:.78rem;"> seg
+        </div>
+      </div>
+    </div>
+
+    <!-- LATERAL -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <!-- LLAMADA DE PRUEBA -->
+      <div class="card" style="border-color:#7c3aed44;background:linear-gradient(135deg,#13101f,#141824);">
+        <div class="card-t" style="margin-bottom:4px;color:#a78bfa;">🧪 Llamada de prueba</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:10px;">Verifica que el bot funciona</div>
+        <input id="test-num" placeholder="+34600000000" style="width:100%;padding:9px 12px;font-size:.82rem;border-color:#7c3aed55;margin-bottom:9px;" />
+        <button onclick="botTestCall()" id="btn-test" style="width:100%;background:#7c3aed;color:#fff;border:none;border-radius:9px;padding:11px;font-size:.82rem;font-weight:800;cursor:pointer;">📞 LLAMAR AHORA</button>
+        <div id="test-status" style="margin-top:9px;font-size:.72rem;min-height:18px;text-align:center;"></div>
+      </div>
+
+      <!-- AÑADIR LEADS -->
+      <div class="card">
+        <div class="card-t" style="margin-bottom:8px;">➕ Añadir leads</div>
+        <textarea id="bot-nuevos" rows="4" placeholder="Uno por línea:&#10;976123456&#10;+34976234567"></textarea>
+        <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <select id="bot-nuevo-op" style="padding:6px 8px;font-size:.72rem;width:auto;">
+            <option value="bot">🤖 Bot IA</option>
+            <option value="fabian">👤 Fabián</option>
+          </select>
+          <select id="bot-nuevo-prio" style="padding:6px 8px;font-size:.72rem;width:auto;">
+            <option value="media">🟡 Media</option>
+            <option value="alta">🔴 Alta</option>
+            <option value="baja">🟢 Baja</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;">
+          <button class="btn btn-green btn-sm" onclick="botGuardar()">Guardar</button>
+          <label class="btn btn-ghost btn-sm" style="cursor:pointer;">Importar CSV<input type="file" accept=".csv" style="display:none" onchange="botImportCSV(event)"></label>
+          <span id="bot-add-msg" style="font-size:.72rem;color:#86efac;"></span>
+        </div>
+      </div>
+
+      <!-- PANEL EDITAR LEAD -->
+      <div class="card" id="bot-edit-card" style="display:none;border-color:#f59e0b55;background:linear-gradient(135deg,#1a1400,#141824);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div class="card-t" style="color:#f59e0b;margin-bottom:0;">✏️ Editar lead</div>
+          <button onclick="botCloseEdit()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;">✕</button>
+        </div>
+        <div style="font-size:.77rem;color:#94a3b8;font-weight:700;margin-bottom:10px;font-family:monospace;" id="bot-edit-num"></div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <select id="edit-est" style="padding:7px 10px;font-size:.75rem;width:auto;">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="caliente">🔥 Caliente — llamar hoy</option>
+            <option value="cita">✅ Cita confirmada</option>
+            <option value="potencial">💙 Potencial — seguimiento</option>
+            <option value="receptivo">🟢 Receptivo — interesado</option>
+            <option value="no_contesta">📵 No contesta — reintentar</option>
+            <option value="no_contactar">🚫 No contactar</option>
+            <option value="invalido">❌ Número inválido</option>
+          </select>
+          <div style="display:flex;gap:6px;">
+            <select id="edit-interes" style="flex:1;padding:7px 8px;font-size:.72rem;width:auto;">
+              <option value="0">— Sin calificar</option>
+              <option value="1">⭐ 1</option><option value="2">⭐⭐ 2</option>
+              <option value="3">⭐⭐⭐ 3</option><option value="4">⭐⭐⭐⭐ 4</option>
+              <option value="5">⭐⭐⭐⭐⭐ 5</option>
+            </select>
+            <select id="edit-prio" style="flex:1;padding:7px 8px;font-size:.72rem;width:auto;">
+              <option value="media">🟡 Media</option>
+              <option value="alta">🔴 Alta</option>
+              <option value="baja">🟢 Baja</option>
+            </select>
+          </div>
+          <select id="edit-accion" style="padding:7px 10px;font-size:.75rem;width:auto;">
+            <option value="Ninguna">— Sin acción</option>
+            <option value="Llamar">📞 Llamar</option>
+            <option value="WhatsApp">💬 WhatsApp</option>
+            <option value="Enviar presupuesto">📄 Presupuesto</option>
+            <option value="Cita">📅 Confirmar cita</option>
+          </select>
+          <input id="edit-fecha-prox" type="date" style="padding:7px 10px;font-size:.73rem;" />
+          <textarea id="edit-notas" rows="2" placeholder="Notas..." style="font-size:.75rem;padding:7px 10px;resize:vertical;"></textarea>
+        </div>
+        <button class="btn btn-green btn-sm" style="width:100%;margin-top:10px;" onclick="botSaveEdit()">✓ Guardar cambios</button>
+      </div>
+
+      <!-- LISTA NEGRA -->
+      <div class="card">
+        <div class="card-t" style="margin-bottom:10px;">🚫 Lista negra</div>
+        <div style="display:flex;gap:8px;margin-bottom:9px;">
+          <input id="bot-neg-num" placeholder="976123456" style="flex:1;padding:7px 11px;font-size:.78rem;">
+          <select id="bot-neg-mot" style="padding:7px 10px;font-size:.73rem;width:auto;">
+            <option value="no_interesa">No interesa</option>
+            <option value="pide_baja">Pide no llamar</option>
+            <option value="invalido">Inválido</option>
+            <option value="ya_cliente">Ya cliente</option>
+          </select>
+        </div>
+        <button class="btn btn-sm btn-full" style="background:var(--red);color:#fff;" onclick="botNegra()">Excluir permanentemente</button>
+        <div style="margin-top:10px;display:flex;justify-content:space-between;">
+          <span style="font-size:.75rem;color:var(--muted);">Excluidos: <strong id="neg-total" style="color:#f87171;">0</strong></span>
+          <button class="btn btn-ghost btn-xs" onclick="botExportNeg()">Exportar</button>
+        </div>
+        <div id="bot-neg-lista" style="max-height:130px;overflow-y:auto;font-size:.72rem;margin-top:8px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CAPTACIÓN ══ -->
+<div class="page" id="page-captacion">
+  <div class="ph"><h2>📣 Captación — Campañas y Marketing</h2><p>Genera copy, gestiona WhatsApp y cuida a tus clientes</p></div>
+
+  <div class="sec-label">Generador de campañas</div>
+  <div class="g2" style="margin-bottom:28px;">
+    <div class="card">
+      <div class="card-t" style="margin-bottom:16px;">Configurar campaña</div>
+      <div class="fg"><label class="lbl">Producto</label>
+        <select id="c-prod">
+          <option>Seguro de Hogar</option><option>Seguro de Vida</option><option>Seguro de Coche</option>
+          <option>Seguro de Decesos</option><option>Seguro de Salud</option><option>Seguro de Negocio</option>
+          <option>Seguro de Comunidad</option><option>Impago de Alquiler</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="lbl">Público</label>
+          <select id="c-pub">
+            <option>Familias Zaragoza</option><option>Autónomos y negocios</option><option>Mayores de 50</option>
+            <option>Administ. de fincas</option><option>Propietarios piso</option><option>Jóvenes 25-35</option>
+          </select>
+        </div>
+        <div class="fg"><label class="lbl">Objetivo</label>
+          <select id="c-obj">
+            <option>Conseguir cita</option><option>Generar llamadas</option><option>Captar leads</option><option>Branding</option>
+          </select>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="lbl">Tono</label>
+          <select id="c-tono">
+            <option>Cercano y de confianza</option><option>Profesional y formal</option>
+            <option>Urgente / oferta</option><option>Emocional / protección</option>
+          </select>
+        </div>
+        <div class="fg"><label class="lbl">Oferta / dato clave</label>
+          <input id="c-oferta" placeholder="Ej: Ahorra hasta 30%">
+        </div>
+      </div>
+      <div class="fg"><label class="lbl">Canal</label>
+        <div style="display:flex;gap:14px;font-size:.82rem;">
+          <label style="display:flex;align-items:center;gap:5px;font-weight:400;cursor:pointer;color:var(--text);"><input type="checkbox" id="c-fb" checked style="width:auto;"> Facebook/IG</label>
+          <label style="display:flex;align-items:center;gap:5px;font-weight:400;cursor:pointer;color:var(--text);"><input type="checkbox" id="c-wa" style="width:auto;"> WhatsApp</label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="genCampana()">✨ Generar campaña</button>
+    </div>
+    <div><div id="c-resultado"><div class="card" style="text-align:center;padding:48px;color:var(--muted);"><div style="font-size:2.5rem;margin-bottom:10px;">📣</div><div>Rellena el formulario y pulsa "Generar campaña"</div></div></div></div>
+  </div>
+
+  <hr class="sep">
+  <div class="sec-label">Plantillas WhatsApp</div>
+  <div class="g2" style="margin-bottom:28px;">
+    <div class="card">
+      <div class="card-t" style="margin-bottom:14px;">📤 Enviar mensaje</div>
+      <div class="fg"><label class="lbl">Plantilla</label>
+        <select id="wa-plt" onchange="loadWAPlt()">
+          <option value="">— Seleccionar —</option>
+          <option value="hogar">Oferta Seguro Hogar</option>
+          <option value="cita">Confirmación cita</option>
+          <option value="seguimiento">Seguimiento</option>
+          <option value="cumple">Felicitación cumpleaños</option>
+          <option value="renovacion">Aviso renovación</option>
+        </select>
+      </div>
+      <div class="fg"><label class="lbl">Número destino</label><input id="wa-num" placeholder="34612345678"></div>
+      <div class="fg"><label class="lbl">Mensaje</label><textarea id="wa-msg" rows="5"></textarea></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-green" style="flex:1;" onclick="abrirWA()">💬 Abrir WhatsApp</button>
+        <button class="btn btn-ghost btn-sm" onclick="copiarTxt('wa-msg')">📋 Copiar</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;">
+      <div class="card" style="cursor:pointer;" onclick="usarWA('hogar')"><div style="font-size:.72rem;font-weight:700;color:var(--accent);margin-bottom:5px;">🏠 Oferta Hogar</div><div style="font-size:.75rem;color:var(--muted);">Hola [nombre], soy Fabián de Ocaso Zaragoza. Tenemos oferta en seguro de hogar este mes. ¿Te llamo 5 min?</div></div>
+      <div class="card" style="cursor:pointer;" onclick="usarWA('cita')"><div style="font-size:.72rem;font-weight:700;color:var(--green);margin-bottom:5px;">✅ Confirmación cita</div><div style="font-size:.75rem;color:var(--muted);">Hola [nombre], te confirmo cita el [fecha] a las [hora]. ¡Hasta pronto!</div></div>
+      <div class="card" style="cursor:pointer;" onclick="usarWA('seguimiento')"><div style="font-size:.72rem;font-weight:700;color:var(--orange);margin-bottom:5px;">⏰ Seguimiento</div><div style="font-size:.75rem;color:var(--muted);">Hola [nombre], soy Fabián de Ocaso. Estuvimos hablando de tu seguro. ¿Has podido pensarlo?</div></div>
+      <div class="card" style="cursor:pointer;" onclick="usarWA('cumple')"><div style="font-size:.72rem;font-weight:700;color:var(--pink);margin-bottom:5px;">🎂 Cumpleaños</div><div style="font-size:.75rem;color:var(--muted);">¡Feliz cumpleaños [nombre]! Un abrazo desde Ocaso Zaragoza 🎉</div></div>
+    </div>
+  </div>
+
+  <hr class="sep">
+  <div id="pv-section">
+    <div class="sec-label">Post-venta — Reseñas y referidos</div>
+    <div style="background:#172033;border:1px solid #d9720033;border-radius:10px;padding:12px 16px;font-size:.78rem;color:#fbbf24;margin-bottom:18px;">
+      💡 <strong>Ritual lunes:</strong> 5 minutos — ¿quién cumplió 30 días? → pide reseña. ¿Quién cumplió 60 días? → pide referido.
+    </div>
+    <div class="g2">
+      <div>
+        <div style="font-size:.8rem;font-weight:700;color:#fff;margin-bottom:10px;">⭐ Pedir reseña en Google (30 días)</div>
+        <div class="copy-result">
+          <div class="copy-platform">Versión corta</div>
+          <div class="copy-text" id="pv1">Hola [NOMBRE] 👋
+
+¿Qué tal todo con la póliza? Espero que estés contento/a.
+
+Si tienes un momento, me ayudarías muchísimo dejando una reseña en Google. Solo son 2 minutos.
+
+Aquí el enlace 👇
+https://g.page/r/CT1uOUapiKdVEBM/review
+
+¡Muchas gracias! 🙏</div>
+          <div class="copy-actions">
+            <button class="btn btn-green btn-sm" onclick="copiarEl('pv1')">📋 Copiar</button>
+            <a class="btn btn-ghost btn-sm" href="https://wa.me/34643096767" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.8rem;font-weight:700;color:#fff;margin-bottom:10px;">🤝 Pedir referido (60 días)</div>
+        <div class="copy-result">
+          <div class="copy-platform">Versión estándar</div>
+          <div class="copy-text" id="pv2">Hola [NOMBRE] 😊
+
+¿Cómo estás? Espero que todo vaya genial con el seguro.
+
+Te quería pedir un favor: si conoces a alguien — familia, amigos, compañeros — que pueda necesitar un seguro, estaré encantado de atenderlos con el mismo trato que a ti.
+
+Sin compromiso. Una presentación de 15 minutos y ya está.
+
+¿Se te ocurre alguien? 🙏
+
+¡Gracias [NOMBRE]! Un abrazo 👊</div>
+          <div class="copy-actions">
+            <button class="btn btn-green btn-sm" onclick="copiarEl('pv2')">📋 Copiar</button>
+            <a class="btn btn-ghost btn-sm" href="https://wa.me/34643096767" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CRM ADMINS ══ -->
+<!-- ════════════════════════════════════
+     SCRAPER
+════════════════════════════════════ -->
+<div class="page" id="page-scraper">
+  <div class="ph">
+    <h2>🕷️ Scraper Idealista — Captación de Leads</h2>
+    <p>Extrae automáticamente contactos de propietarios que alquilan en Idealista</p>
+  </div>
+
+  <!-- STATUS SERVIDOR -->
+  <div style="background:#0a1628;border:1px solid #1e3a5f;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="dot-live"></span>
+      <span id="scraper-srv-txt" style="font-size:.85rem;font-weight:600;color:#fbbf24;">Comprobando servidor local...</span>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="scraperCheckServer()">⟳ Comprobar</button>
+  </div>
+
+  <!-- LANZAR EL SCRAPER -->
+  <div class="sec-label">Lanzar el scraper</div>
+  <div class="g2" style="margin-bottom:14px;">
+    <button id="btn-zgz" onclick="scraperLanzar('zaragoza')"
+      style="background:linear-gradient(135deg,#16a34a,#15803d);border:none;border-radius:14px;padding:28px 20px;cursor:pointer;text-align:left;transition:opacity .2s;">
+      <div style="font-size:2rem;margin-bottom:6px;">🚀</div>
+      <div style="color:#4ade80;font-weight:800;font-size:1.15rem;letter-spacing:.5px;">BUSCAR ZARAGOZA</div>
+      <div style="color:#86efac;font-size:.78rem;margin-top:4px;">Captura ~40 leads · tarda ~50 min</div>
+    </button>
+    <button id="btn-sev" onclick="scraperLanzar('sevilla')"
+      style="background:linear-gradient(135deg,#1d4ed8,#1e40af);border:none;border-radius:14px;padding:28px 20px;cursor:pointer;text-align:left;transition:opacity .2s;">
+      <div style="font-size:2rem;margin-bottom:6px;">🚀</div>
+      <div style="color:#93c5fd;font-weight:800;font-size:1.15rem;letter-spacing:.5px;">BUSCAR SEVILLA</div>
+      <div style="color:#bfdbfe;font-size:.78rem;margin-top:4px;">Captura ~40 leads · tarda ~50 min</div>
+    </button>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center;">
+    <input id="scraper-ciudad-input" placeholder="🌍 Otra ciudad — escribe el nombre (ej: Madrid, Málaga, Bilbao...)"
+      style="flex:1;padding:13px 16px;background:#0e1117;border:1px solid var(--border);border-radius:10px;color:#fff;font-size:.88rem;font-family:inherit;">
+    <button onclick="scraperLanzarCiudad()"
+      style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:13px 22px;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap;">🚀 BUSCAR CIUDAD</button>
+  </div>
+
+  <!-- ACCIONES -->
+  <div class="g3" style="margin-bottom:28px;">
+    <button class="card" style="border:none;cursor:pointer;text-align:center;padding:20px 14px;transition:background .15s;" onclick="scraperAccion('sheets')" onmouseover="this.style.background='#1e2535'" onmouseout="this.style.background=''">
+      <div style="font-size:1.6rem;margin-bottom:6px;">📊</div>
+      <div style="font-weight:700;font-size:.88rem;color:#fff;">Enviar a Sheets</div>
+      <div style="font-size:.73rem;color:var(--muted);margin-top:3px;">Sube el Excel al CRM</div>
+    </button>
+    <button class="card" style="border:none;cursor:pointer;text-align:center;padding:20px 14px;transition:background .15s;" onclick="scraperAccion('verificar')" onmouseover="this.style.background='#1e2535'" onmouseout="this.style.background=''">
+      <div style="font-size:1.6rem;margin-bottom:6px;">✅</div>
+      <div style="font-weight:700;font-size:.88rem;color:#fff;">Verificar leads</div>
+      <div style="font-size:.73rem;color:var(--muted);margin-top:3px;">Comprueba cuáles siguen activos</div>
+    </button>
+    <button class="card" style="border:none;cursor:pointer;text-align:center;padding:20px 14px;transition:background .15s;" onclick="scraperAccion('telegram')" onmouseover="this.style.background='#1e2535'" onmouseout="this.style.background=''">
+      <div style="font-size:1.6rem;margin-bottom:6px;">📱</div>
+      <div style="font-weight:700;font-size:.88rem;color:#fff;">Reporte Telegram</div>
+      <div style="font-size:.73rem;color:var(--muted);margin-top:3px;">Envía resumen del día</div>
+    </button>
+  </div>
+
+  <!-- ESTADO DEL SCRAPER -->
+  <div id="scraper-estado" style="display:none;background:#0d1829;border:1px solid #1e3a5f;border-radius:10px;padding:14px 18px;margin-bottom:22px;font-size:.84rem;color:#93c5fd;"></div>
+
+  <!-- ACCESOS DIRECTOS -->
+  <div class="sec-label">Accesos directos</div>
+  <div class="g3" style="margin-bottom:28px;">
+    <a href="file:///C:/Users/moral/OneDrive/Escritorio/AFMM%20NEXUS/02_CLIENTES/001_FabianTeAsegura/FABIAN-KIT-HERRAMIENTAS/scraper-idealista/SISTEMA_PROFESIONAL.html" target="_blank" class="card" style="text-decoration:none;display:flex;align-items:center;gap:14px;padding:16px 18px;">
+      <span style="font-size:1.4rem;">🖥️</span>
+      <div><div style="font-weight:700;font-size:.85rem;color:#fff;">Panel visual del Scraper</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px;">Menú alternativo en HTML</div></div>
+    </a>
+    <a href="file:///C:/Users/moral/OneDrive/Escritorio/AFMM%20NEXUS/02_CLIENTES/001_FabianTeAsegura/FABIAN-KIT-HERRAMIENTAS/scraper-idealista/LEEME%20-%20COMO%20USAR%20EL%20SISTEMA.html" target="_blank" class="card" style="text-decoration:none;display:flex;align-items:center;gap:14px;padding:16px 18px;">
+      <span style="font-size:1.4rem;">📖</span>
+      <div><div style="font-weight:700;font-size:.85rem;color:#fff;">Guía completa</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px;">Manual paso a paso detallado</div></div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1w7bPWCR5UqrMl7mkc1OS85xSsw1UWaUHl6oLVGchliI" target="_blank" class="card" style="text-decoration:none;display:flex;align-items:center;gap:14px;padding:16px 18px;">
+      <span style="font-size:1.4rem;">📋</span>
+      <div><div style="font-weight:700;font-size:.85rem;color:#fff;">Ver leads en Sheets</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px;">CRM Idealista · Zaragoza y Sevilla</div></div>
+    </a>
+  </div>
+
+  <!-- MANUAL DE USO -->
+  <div class="sec-label">Manual de uso — solo lo que necesitas saber</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <span style="background:#7c3aed;color:#fff;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;">Solo una vez</span>
+      <span style="font-size:.9rem;font-weight:700;color:#fff;">🔧 Instalación inicial</span>
+    </div>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:14px;">Haz esto solo la primera vez. Después nunca más lo necesitarás.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="background:#2563eb;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">1</span>
+        <div><div style="font-weight:600;font-size:.84rem;color:#fff;">Abre la carpeta del Scraper</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:3px;">Escritorio → AFMM NEXUS → 01_SISTEMA → CAPTACION LEADS IDEALISTA</div></div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="background:#2563eb;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">2</span>
+        <div><div style="font-weight:600;font-size:.84rem;color:#fff;">Ejecuta INSTALAR-WINDOWS.bat</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:3px;">Doble clic — instala Python y dependencias automáticamente</div></div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="background:#2563eb;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">3</span>
+        <div><div style="font-weight:600;font-size:.84rem;color:#fff;">Verifica con VERIFICAR-INSTALACION.bat</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:3px;">Confirma que todo está listo antes de lanzar</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <span style="background:#16a34a;color:#fff;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;">Cada semana</span>
+      <span style="font-size:.9rem;font-weight:700;color:#fff;">🚀 Uso normal</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="background:#16a34a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">1</span>
+        <div><div style="font-weight:600;font-size:.84rem;color:#fff;">Pulsa BUSCAR ZARAGOZA o BUSCAR SEVILLA</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:3px;">El scraper arranca solo. No cierres Chrome — déjalo correr ~50 min</div></div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="background:#16a34a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">2</span>
+        <div><div style="font-weight:600;font-size:.84rem;color:#fff;">Pulsa Enviar a Sheets</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:3px;">Sube los leads capturados al Google Sheets del CRM</div></div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="background:#16a34a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">3</span>
+        <div><div style="font-weight:600;font-size:.84rem;color:#fff;">Pulsa Verificar leads → Reporte Telegram</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:3px;">Filtra inactivos y recibe el resumen en Telegram</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-admins">
+  <div class="ph"><h2>🏢 CRM Administradores de Fincas</h2><p>Fuente: Colegio Oficial de Administradores de Fincas de Aragón · Zaragoza · 1 admin = acceso a todas sus comunidades</p></div>
+
+  <!-- KPIs -->
+  <div class="g4" style="margin-bottom:24px;">
+    <div class="stat" style="--c:#ea580c;"><div class="stat-n" id="adm-cnt-pend">0</div><div class="stat-l">Pendientes</div></div>
+    <div class="stat" style="--c:#2563eb;"><div class="stat-n" id="adm-cnt-cont">0</div><div class="stat-l">Contactados</div></div>
+    <div class="stat" style="--c:#7c3aed;"><div class="stat-n" id="adm-cnt-cita">0</div><div class="stat-l">Con cita</div></div>
+    <div class="stat" style="--c:#16a34a;"><div class="stat-n" id="adm-cnt-cerr">0</div><div class="stat-l">Cerrados</div></div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+    <input id="crmSearch" type="search" placeholder="Buscar nombre, dirección o teléfono..." oninput="crmFiltrar()" style="flex:1;min-width:180px;padding:8px 12px;font-size:.82rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;">
+    <select id="crmFilter" onchange="crmFiltrar()" style="padding:8px 12px;font-size:.82rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;">
+      <option value="">Todos los estados</option>
+      <option value="Pendiente">Pendiente</option>
+      <option value="Contactado">Contactado</option>
+      <option value="Cita">Cita</option>
+      <option value="Cerrado">Cerrado</option>
+      <option value="No interesa">No interesa</option>
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="crmExportar()">📥 Exportar CSV</button>
+    <button class="btn btn-ghost btn-sm" onclick="if(confirm('¿Borrar todo el seguimiento guardado?')){localStorage.removeItem('crmAdministradoresZaragoza');crmCargar();crmFiltrar();}">🗑 Borrar</button>
+  </div>
+
+  <!-- TABLA -->
+  <div style="overflow-x:auto;margin-bottom:28px;">
+  <table id="crmTable" style="width:100%;border-collapse:collapse;font-size:.81rem;">
+    <thead><tr style="background:var(--bg3);">
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">#</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Nombre</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Dirección</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Teléfono</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Oport.</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Estado</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Últ. contacto</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Próxima acción</th>
+      <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap;">Notas</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Carlos Abadias Nicolas</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Parque, 21, Local · 50007</td><td><a class="crm-phone" href="tel:976255802">976-255802</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="1" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="1" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="1" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="1" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>2</td><td><strong>Ignacio Vicente Alba Biel</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Coso, 51, Piso 2 · 50001</td><td><a class="crm-phone" href="tel:976336146">976-336146</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="2" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="2" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="2" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="2" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>3</td><td><strong>Rosa-Maria Aldea Cantin</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Padre Consolación, 4 Local · 50003</td><td><a class="crm-phone" href="tel:976446577">976-446577</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="3" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="3" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="3" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="3" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>4</td><td><strong>Raquel Alonso Aldea</strong></td><td style="color:var(--muted);font-size:.77rem;">Pº Independencia, 22, 7ª · 50004</td><td><a class="crm-phone" href="tel:627263387">627-263387</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="4" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="4" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="4" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="4" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>5</td><td><strong>Cristina Alonso Segovia</strong></td><td style="color:var(--muted);font-size:.77rem;">Urb. Maitena, 28 · 50011</td><td><a class="crm-phone" href="tel:976783026">976-783026</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="5" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="5" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="5" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="5" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>6</td><td><strong>Antonio-Manuel Amador Fernandez</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Santander, 36, Local 3 · 50001</td><td><a class="crm-phone" href="tel:976319193">976-319193</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="6" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="6" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="6" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="6" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>7</td><td><strong>Ricardo Anson Aliaga</strong></td><td style="color:var(--muted);font-size:.77rem;">Coso, 56, 7º Izda · 50001</td><td><a class="crm-phone" href="tel:976238402">976-238402</a></td><td><span class="crm-score-medio">Media</span></td><td><select class="crm-track crm-estado" data-id="7" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="7" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="7" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="7" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>8</td><td><strong>Beatriz Antin Berga</strong></td><td style="color:var(--muted);font-size:.77rem;">Isaac Peral, 1 Dpdo, 1º F · 50001</td><td><a class="crm-phone" href="tel:976218821">976-218821</a></td><td><span class="crm-score-medio">Media</span></td><td><select class="crm-track crm-estado" data-id="8" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="8" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="8" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="8" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>9</td><td><strong>Ana-Cristina Antoran Enciso</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Cañizar del Olivar, 1, Local · 50017</td><td><a class="crm-phone" href="tel:976296745">976-296745</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="9" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="9" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="9" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="9" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>10</td><td><strong>David Aparici Melic</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Monasterio de Samos, 39-41 · 50013</td><td><a class="crm-phone" href="tel:976480290">976-480290</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="10" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="10" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="10" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="10" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>11</td><td><strong>Enrique Aranda Aban</strong></td><td style="color:var(--muted);font-size:.77rem;">Avda. Puente del Pilar, 33 · 50014</td><td><a class="crm-phone" href="tel:976292612">976-292612</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="11" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="11" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="11" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="11" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>12</td><td><strong>Jose-Manuel Aranda Carrascosa</strong></td><td style="color:var(--muted);font-size:.77rem;">Conde de Aranda, 126, Entlo. Izda · 50003</td><td><a class="crm-phone" href="tel:976283270">976-283270</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="12" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="12" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="12" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="12" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>13</td><td><strong>Victor Arandia Gregorio</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Laguna de Rins, 10, Ppal. Izda · 50005</td><td><a class="crm-phone" href="tel:976236633">976-236633</a></td><td><span class="crm-score-medio">Media</span></td><td><select class="crm-track crm-estado" data-id="13" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="13" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="13" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="13" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>14</td><td><strong>Luis Bartolome Arranz Duran</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Coso, 92 · 50001</td><td><a class="crm-phone" href="tel:976917040">976-917040</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="14" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="14" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="14" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="14" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>15</td><td><strong>Natalia Ayuso Escuer</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Ciudadela, 16, 4º D · 50017</td><td><a class="crm-phone" href="tel:976322354">976-322354</a></td><td><span class="crm-score-medio">Media</span></td><td><select class="crm-track crm-estado" data-id="15" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="15" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="15" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="15" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>16</td><td><strong>Ana-Isabel Aznar Perez</strong></td><td style="color:var(--muted);font-size:.77rem;">Paseo Calanda, 27, Local · 50010</td><td><a class="crm-phone" href="tel:976346770">976-346770</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="16" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="16" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="16" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="16" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>17</td><td><strong>Silvia Aguilar Martin</strong></td><td style="color:var(--muted);font-size:.77rem;">Av. La Sagrada, 2, Local · La Muela</td><td><a class="crm-phone" href="tel:976149430">976-149430</a></td><td><span class="crm-score-medio">Media</span></td><td><select class="crm-track crm-estado" data-id="17" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="17" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="17" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="17" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>18</td><td><strong>Daniel Alonso Gonzalez</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ El Parque, 21, Local · 50007</td><td><a class="crm-phone" href="tel:976255802">976-255802</a></td><td><span class="crm-score-medio">Media</span></td><td><select class="crm-track crm-estado" data-id="18" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="18" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="18" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="18" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>19</td><td><strong>Silvia Alvarez Aldea</strong></td><td style="color:var(--muted);font-size:.77rem;">C/ Padre Consolacion, 4, Local · 50003</td><td><a class="crm-phone" href="tel:976446577">976-446577</a></td><td><span class="crm-score-medio">Media</span></td><td><select class="crm-track crm-estado" data-id="19" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="19" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="19" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="19" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+      <tr><td>20</td><td><strong>Juan-Carlos Aranda Carrascosa</strong></td><td style="color:var(--muted);font-size:.77rem;">Conde de Aranda, 126, Entlo. Drch · 50003</td><td><a class="crm-phone" href="tel:976283277">976-283277</a></td><td><span class="crm-score-alto">⭐ Alta</span></td><td><select class="crm-track crm-estado" data-id="20" data-field="estado" onchange="crmGuardar();crmFiltrar()"><option>Pendiente</option><option>Contactado</option><option>Cita</option><option>Cerrado</option><option>No interesa</option></select></td><td><input class="crm-track" type="date" data-id="20" data-field="ultimo" onchange="crmGuardar()"></td><td><input class="crm-track" type="date" data-id="20" data-field="proxima" onchange="crmGuardar()"></td><td><textarea class="crm-track crm-track-notes" data-id="20" data-field="notas" placeholder="Notas..." oninput="crmGuardar()"></textarea></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- AÑADIR ADMINISTRADOR -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-t" style="margin-bottom:14px;">➕ Añadir administrador</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div><label class="lbl">Nombre / Empresa *</label><input id="cadm-nombre" placeholder="García Administraciones S.L."></div>
+      <div><label class="lbl">Teléfono *</label><input id="cadm-tel" placeholder="976 123 456" type="tel"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:10px;">
+      <div><label class="lbl">Dirección</label><input id="cadm-dir" placeholder="C/ Coso, 51, Piso 2 · 50001"></div>
+      <div><label class="lbl">Oportunidad</label>
+        <select id="cadm-op">
+          <option value="alta">⭐ Alta</option>
+          <option value="media">Media</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="btn btn-primary" style="flex:1;" onclick="crmAddAdmin()">➕ Añadir al CRM</button>
+      <button class="btn btn-ghost btn-sm" onclick="crmBuscarCafaragon()" id="btn-cafaragon" title="Busca automáticamente más administradores en cafaragon.com y los añade aquí">🔍 Buscar más en cafaragon.com</button>
+    </div>
+    <div id="cadm-status" style="display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.8rem;"></div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <div class="card">
+    <div class="card-t" style="margin-bottom:16px;">💬 Scripts de contacto</div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:6px;">📞 Script llamada fría (60 seg.)</div>
+      <div id="crm-script-call" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.78rem;color:var(--muted);line-height:1.8;white-space:pre-wrap;user-select:all;cursor:text;">Buenos días, ¿hablo con [nombre]? Soy Fabián Morales, asesor de seguros en Zaragoza.
+
+Le llamo porque trabajo con varios administradores de fincas aquí en Zaragoza y les ofrezco un servicio que suele interesarles: reviso gratuitamente el seguro de comunidad de sus fincas y si detecto algo que se puede mejorar — cobertura, precio, condiciones — se lo indico sin compromiso.
+
+También puedo ofrecer revisión gratuita a los propietarios de sus comunidades sobre sus seguros de hogar o decesos. No tienen que cambiar nada si no quieren, es solo información.
+
+¿Tendría 20 minutos esta semana para que le explique cómo funciona?</div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="copiarEl('crm-script-call')">📋 Copiar script llamada</button>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:6px;">💬 WhatsApp — Primera toma de contacto</div>
+      <div id="crm-script-wa" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.78rem;color:var(--muted);line-height:1.8;white-space:pre-wrap;user-select:all;cursor:text;">Hola [nombre], soy Fabián Morales, asesor de seguros en Zaragoza.
+
+Le escribo porque ofrezco a administradores de fincas un servicio gratuito: revisión del seguro de comunidad de sus fincas y asesoramiento a sus propietarios sobre hogar y decesos.
+
+Sin compromiso de contratación. Si está bien, se lo confirmo. Si se puede mejorar, se lo propongo.
+
+¿Le parece bien que hablemos 20 minutos esta semana?</div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="copiarEl('crm-script-wa')">📋 Copiar WhatsApp</button>
+    </div>
+    <div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:6px;">✉️ Email — Presentación formal</div>
+      <div id="crm-script-email" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.78rem;color:var(--muted);line-height:1.8;white-space:pre-wrap;user-select:all;cursor:text;">Asunto: Revisión gratuita seguros de comunidad — Fabián Morales, asesor en Zaragoza
+
+Estimado/a [nombre]:
+
+Me dirijo a usted porque trabajo como asesor de seguros en Zaragoza y colaboro habitualmente con administradores de fincas ofreciendo un servicio que les permite dar valor añadido a sus clientes sin coste.
+
+En concreto, ofrezco:
+- Revisión gratuita del seguro de comunidad de las fincas que gestiona
+- Asesoramiento gratuito a propietarios sobre seguros de hogar, decesos y ahorro
+- Informe escrito con los resultados de la revisión
+
+No hay obligación de contratar nada. Si el seguro está correcto, se lo confirmo por escrito. Si hay margen de mejora, se lo propongo.
+
+¿Tendría disponibilidad para una reunión breve esta semana o la próxima?
+
+Fabián Morales · Asesor de Seguros · Zaragoza · 643 09 67 67 · fabianteasegura.com</div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="copiarEl('crm-script-email')">📋 Copiar email</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — CITA DIRECTA -->
+<div id="modal-cita-directa" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;align-items:center;justify-content:center;">
+  <div style="background:#0e1117;border:1px solid #4f46e5;border-radius:16px;padding:32px;max-width:480px;width:94%;box-shadow:0 20px 60px rgba(0,0,0,.6);">
+    <h3 style="color:#fff;font-size:1.1rem;margin-bottom:4px;">📅 Agendar cita directa</h3>
+    <p style="color:#64748b;font-size:.78rem;margin-bottom:20px;">Se guarda en Pipeline + Google Calendar + aviso Telegram</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div><label style="font-size:.72rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;">Nombre *</label>
+        <input id="cd-nom" placeholder="Nombre Apellido" style="width:100%;padding:10px 12px;background:#141824;border:1px solid #2d3748;border-radius:8px;color:#fff;font-size:.88rem;font-family:inherit;"></div>
+      <div><label style="font-size:.72rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;">Teléfono *</label>
+        <input id="cd-tel" placeholder="612 345 678" type="tel" style="width:100%;padding:10px 12px;background:#141824;border:1px solid #2d3748;border-radius:8px;color:#fff;font-size:.88rem;font-family:inherit;"></div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:.72rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;">📅 Fecha y hora *</label>
+      <input id="cd-fecha" type="datetime-local" style="width:100%;padding:11px 14px;background:#141824;border:2px solid #4f46e5;border-radius:8px;color:#fff;font-size:.95rem;font-family:inherit;">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div><label style="font-size:.72rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;">Producto *</label>
+        <select id="cd-prod-d" style="width:100%;padding:10px 12px;background:#141824;border:1px solid #2d3748;border-radius:8px;color:#fff;font-size:.85rem;font-family:inherit;">
+          <option>Seguro Hogar</option><option>Seguro Vida</option><option>Seguro Coche</option>
+          <option>Seguro Decesos</option><option>Seguro Salud</option><option>Seguro Negocio</option>
+          <option>Seguro Comunidad</option><option>Impago Alquiler</option>
+        </select></div>
+      <div><label style="font-size:.72rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;">Origen</label>
+        <select id="cd-orig-d" style="width:100%;padding:10px 12px;background:#141824;border:1px solid #2d3748;border-radius:8px;color:#fff;font-size:.85rem;font-family:inherit;">
+          <option>Idealista (propio)</option><option>Bot IA llamadas</option><option>Formulario web</option>
+          <option>Instagram</option><option>Referido</option><option>Administradores fincas</option><option>Otro</option>
+        </select></div>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="font-size:.72rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;">Notas</label>
+      <input id="cd-notas" placeholder="Interesado en hogar, viene de Idealista..." style="width:100%;padding:10px 12px;background:#141824;border:1px solid #2d3748;border-radius:8px;color:#fff;font-size:.85rem;font-family:inherit;">
+    </div>
+    <div style="background:#0f172a;border:1px solid #1e2535;border-radius:8px;padding:10px 14px;margin-bottom:18px;font-size:.75rem;color:#64748b;">
+      ✅ Se añade al Pipeline &nbsp;·&nbsp; 📅 Evento en Google Calendar &nbsp;·&nbsp; ⏰ Aviso Telegram 30min antes
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="confirmarCitaDirecta()" style="flex:1;padding:13px;background:#4f46e5;color:#fff;border:none;border-radius:10px;font-size:.92rem;font-weight:700;cursor:pointer;">📅 Agendar cita →</button>
+      <button onclick="cerrarCitaDirecta()" style="padding:13px 18px;background:transparent;color:#64748b;border:1px solid #1e2535;border-radius:10px;font-size:.85rem;cursor:pointer;">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — AGENDAR CITA (desde CRM) -->
+<div id="modal-cita" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center;">
+  <div style="background:#0e1117;border:1px solid #1e2535;border-radius:16px;padding:32px;max-width:440px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+    <h3 style="color:#fff;font-size:1.1rem;margin-bottom:6px;">📅 Agendar cita</h3>
+    <div id="mc-nombre" style="color:#a78bfa;font-size:.85rem;font-weight:700;margin-bottom:2px;"></div>
+    <div id="mc-prod" style="color:#64748b;font-size:.78rem;margin-bottom:20px;"></div>
+    <label style="font-size:.75rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Fecha y hora</label>
+    <input id="mc-fecha" type="datetime-local" style="width:100%;margin:8px 0 16px;padding:10px 14px;background:#141824;border:1px solid #2d3748;border-radius:8px;color:#fff;font-size:.9rem;font-family:inherit;">
+    <label style="font-size:.75rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Notas (opcional)</label>
+    <textarea id="mc-notas" rows="2" placeholder="Lo que necesitas recordar..." style="width:100%;margin:8px 0 20px;padding:10px 14px;background:#141824;border:1px solid #2d3748;border-radius:8px;color:#fff;font-size:.85rem;font-family:inherit;resize:vertical;"></textarea>
+    <div style="display:flex;gap:10px;">
+      <button onclick="confirmarCita()" style="flex:1;padding:11px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;">✅ Confirmar cita</button>
+      <button onclick="cerrarModalCita()" style="padding:11px 18px;background:transparent;color:#94a3b8;border:1px solid #2d3748;border-radius:8px;font-size:.85rem;cursor:pointer;">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — ACCIONES POST-CITA -->
+<div id="modal-acciones" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center;">
+  <div style="background:#0e1117;border:1px solid #1e2535;border-radius:16px;padding:32px;max-width:460px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:2.5rem;">🎉</div>
+      <h3 style="color:#fff;font-size:1rem;margin:8px 0 4px;">Cita agendada</h3>
+      <div id="ma-info" style="color:#a78bfa;font-size:.82rem;font-weight:600;"></div>
+      <div style="color:#4ade80;font-size:.75rem;margin-top:6px;">✅ Evento creado en Google Calendar</div>
+      <div style="color:#4ade80;font-size:.75rem;margin-top:3px;">⏰ Aviso Telegram programado 30 min antes</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <a id="ma-calendar" href="#" target="_blank" onclick="document.getElementById('modal-acciones').style.display='none';"
+         style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:#1e3a8a;border-radius:10px;text-decoration:none;color:#fff;">
+        <span style="font-size:1.4rem;">📅</span>
+        <div><div style="font-weight:700;font-size:.88rem;">Ver en Google Calendar</div>
+          <div style="font-size:.73rem;color:#93c5fd;">El evento ya está en tu calendario</div></div>
+      </a>
+      <a id="ma-wa" href="#" target="_blank" onclick="document.getElementById('modal-acciones').style.display='none';"
+         style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:#166534;border-radius:10px;text-decoration:none;color:#fff;">
+        <span style="font-size:1.4rem;">💬</span>
+        <div><div style="font-weight:700;font-size:.88rem;">Enviar WhatsApp post-llamada</div>
+          <div style="font-size:.73rem;color:#86efac;">Mensaje con fecha acordada y producto</div></div>
+      </a>
+      <button onclick="document.getElementById('modal-acciones').style.display='none';"
+              style="padding:11px;background:transparent;color:#64748b;border:1px solid #1e2535;border-radius:8px;font-size:.82rem;cursor:pointer;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ NAVEGACIÓN ══
+function goTab(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  else document.querySelectorAll('.tab').forEach(t => { if ((t.getAttribute('onclick')||'').includes("'"+id+"'")) t.classList.add('active'); });
+  if (id === 'scraper') scraperCheckServer();
+  if (id === 'admins') { crmCargar(); crmFiltrar(); }
+}
+
+// Subtabs Pipeline+Cartera
+function showPipTab(id) {
+  document.getElementById('pip-crm-panel').style.display    = id === 'crm'     ? 'block' : 'none';
+  document.getElementById('pip-cartera-panel').style.display = id === 'cartera' ? 'block' : 'none';
+  document.getElementById('sub-tab-crm').classList.toggle('active',     id === 'crm');
+  document.getElementById('sub-tab-cartera').classList.toggle('active', id === 'cartera');
+}
+
+// Scripts Claude colapsable
+function toggleScriptsSection() {
+  const sec = document.getElementById('scripts-section');
+  const arr = document.getElementById('scripts-arrow');
+  const open = sec.style.display === 'none';
+  sec.style.display = open ? 'block' : 'none';
+  arr.textContent   = open ? '▾' : '▸';
+}
+
+// ══ RELOJ ══
+const DIAS  = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function tick() {
+  const n = new Date();
+  const h = String(n.getHours()).padStart(2,'0'), m = String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('navClock').textContent = `${DIAS[n.getDay()]} ${n.getDate()} · ${h}:${m}`;
+}
+tick(); setInterval(tick, 30000);
+
+// ══ TOAST ══
+function toast(msg='✓ Copiado') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+function copiarEl(id)  { navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => toast()); }
+function copiarTxt(id) { navigator.clipboard.writeText(document.getElementById(id).value).then(() => toast()); }
+
+// ══ HOY TOCA ══
+const PASOS = {
+  1:[{n:'1',cls:'pn-b',a:'Revisa Telegram — /leads',d:'Abre @leadsfabian_bot y mira el estado del día',tag:'Diario'},
+     {n:'2',cls:'pn-p',a:'monday-brief en Claude',d:'Pega el guión de Scripts Claude → planifica la semana',tag:'Guión'},
+     {n:'3',cls:'pn-g',a:'Llama a los pendientes del CRM',d:'Pipeline → filtra pendientes → llama en orden',tag:'CRM'},
+     {n:'4',cls:'pn-b',a:'Actualiza estados en el CRM',d:'Cada llamada: Contactado / Cita / No interesa',tag:'CRM'}],
+  2:[{n:'1',cls:'pn-b',a:'Revisa Telegram — /leads',d:'Novedades del bot durante la noche',tag:'Diario'},
+     {n:'2',cls:'pn-g',a:'Llama a los pendientes del CRM',d:'Prioridad alta primero',tag:'CRM'},
+     {n:'3',cls:'pn-b',a:'Actualiza estados',d:'Registra resultado de cada llamada',tag:'CRM'}],
+  3:[{n:'1',cls:'pn-b',a:'Revisa Telegram — /leads',d:'Novedades del bot durante la noche',tag:'Diario'},
+     {n:'2',cls:'pn-g',a:'Llama a los pendientes del CRM',d:'Prioridad alta primero',tag:'CRM'},
+     {n:'3',cls:'pn-b',a:'Actualiza estados',d:'Registra resultado de cada llamada',tag:'CRM'}],
+  4:[{n:'1',cls:'pn-b',a:'Revisa Telegram — /leads',d:'Novedades del bot durante la noche',tag:'Diario'},
+     {n:'2',cls:'pn-g',a:'Llama a los pendientes del CRM',d:'Prioridad alta primero',tag:'CRM'},
+     {n:'3',cls:'pn-b',a:'Actualiza estados',d:'Registra resultado de cada llamada',tag:'CRM'}],
+  5:[{n:'1',cls:'pn-b',a:'Revisa Telegram — /leads',d:'Novedades del bot',tag:'Diario'},
+     {n:'2',cls:'pn-g',a:'Últimas llamadas de la semana',d:'Contacta los pendientes que queden',tag:'CRM'},
+     {n:'3',cls:'pn-p',a:'friday-brief en Claude',d:'Pega el guión de Scripts Claude → cierra la semana',tag:'Guión'}]
+};
+function renderHoy() {
+  const n = new Date(); const dow = n.getDay();
+  document.getElementById('hoyBadge').textContent   = DIAS[dow];
+  document.getElementById('hoyTitulo').textContent  = dow===0||dow===6 ? '🌿 Día de descanso' : dow===1 ? '🌅 Arrancamos semana' : dow===5 ? '🏁 Último día de trabajo' : '💪 Día de llamadas';
+  document.getElementById('hoyFecha').textContent   = `${n.getDate()} de ${MESES[n.getMonth()]} de ${n.getFullYear()}`;
+  const pasos = PASOS[dow]; const cont = document.getElementById('hoyPasos');
+  if (!pasos) { cont.innerHTML = '<div style="color:var(--muted);font-size:.85rem;padding:8px 0;">El sistema automatizado sigue trabajando. Bot y n8n activos.</div>'; return; }
+  cont.innerHTML = pasos.map(p => `<div class="paso-item"><div class="paso-num ${p.cls}">${p.n}</div><div class="paso-info"><div class="paso-accion">${p.a}</div><div class="paso-det">${p.d}</div></div><div class="paso-tag">${p.tag}</div></div>`).join('');
+}
+
+// ══ ESTADO DEL SISTEMA — PINGS REALES ══
+async function pingUrl(url, timeoutMs=35000) {
+  try {
+    const ctrl=new AbortController();
+    const t=setTimeout(()=>ctrl.abort(), timeoutMs);
+    await fetch(url, {mode:'no-cors', cache:'no-cache', signal:ctrl.signal});
+    clearTimeout(t);
+    return true;
+  } catch(e){ return false; }
+}
+async function checkEstadoSistema() {
+  const set = (id, ok, txt) => {
+    const el=document.getElementById(id);
+    if(el){ el.textContent=txt; el.className='badge '+(ok===true?'bg-green':ok===null?'bg-yellow':'bg-red'); }
+  };
+  // n8n Railway — puede tardar hasta 30s en despertar desde inactividad
+  set('n8n-status', null, '⟳ Despertando...');
+  const n8nOk = await pingUrl('https://primary-production-55dc.up.railway.app');
+  set('n8n-status', n8nOk, n8nOk ? '✓ Online' : '✗ Sin respuesta');
+  // Web
+  set('web-status', null, '⟳ Comprobando');
+  const webOk = await pingUrl('https://fabianteasegura.com', 10000);
+  set('web-status', webOk, webOk ? '✓ Online' : '✗ Sin respuesta');
+}
+
+// ══ CRM SEGUIMIENTOS ══
+const N8N_WRITE  = 'https://primary-production-55dc.up.railway.app/webhook/crm-fabian';
+const N8N_READ   = 'https://primary-production-55dc.up.railway.app/webhook/crm-fabian-read';
+const N8N_SECRET = 'fabian-nexus-2026';
+
+function setSyncStatus(msg, ok) {
+  const el = document.getElementById('sync-status');
+  if (el) { el.textContent = msg; el.style.color = ok ? '#4ade80' : ok===null ? '#fbbf24' : '#f87171'; }
+}
+async function syncToSheets(action, row) {
+  try {
+    setSyncStatus('⟳ Sincronizando...', null);
+    await fetch(N8N_WRITE, { method:'POST', headers:{'Content-Type':'application/json','X-Secret':N8N_SECRET}, body: JSON.stringify({action, ...row}) });
+    setSyncStatus('✓ Guardado en Sheets', true);
+    setTimeout(() => setSyncStatus('✓ Sheets conectado', true), 2000);
+  } catch(e) { setSyncStatus('⚠ Sin conexión — guardado local', false); }
+}
+async function loadFromSheets() {
+  setSyncStatus('⟳ Cargando...', null);
+  try {
+    const r = await fetch(N8N_READ, { headers:{'X-Secret':N8N_SECRET} });
+    const text = await r.text();
+    if (!text || !text.trim()) { setSyncStatus('✓ Sheets vacío — usando local', true); return; }
+    const rows = JSON.parse(text);
+    if (!Array.isArray(rows) || !rows.length) { setSyncStatus('✓ Sheets vacío — usando local', true); return; }
+    const byId = {};
+    rows.forEach(row => { const id = String(row.ID||row.id||''); if(!id) return; const ts = row.FECHA||row.timestamp||''; if(!byId[id]||ts>(byId[id]._ts||'')){byId[id]=row;byId[id]._ts=ts;} });
+    segs = Object.values(byId).filter(r=>(r.ACCION||r.action)!=='delete').map(r=>({id:Number(r.ID||r.id)||Date.now(),nom:r.NOMBRE||r.nom||'',tel:r.TELEFONO||r.tel||'',prod:r.PRODUCTO||r.prod||'',est:r.ESTADO||r.est||'pendiente',orig:r.ORIGEN||r.orig||'',notas:r.NOTAS||r.notas||'',fecha:r['FECHA CONTACTO']||r.fecha||''}));
+    saveSeg(); renderSeg(); updateKPIs();
+    setSyncStatus(`✓ ${segs.length} contactos cargados`, true);
+  } catch(e) { setSyncStatus('⚠ Sheets inaccesible — datos locales', false); }
+}
+
+let segs = JSON.parse(localStorage.getItem('segs') || '[]');
+function saveSeg() { localStorage.setItem('segs', JSON.stringify(segs)); }
+function addSeg() {
+  const nom = document.getElementById('s-nom').value.trim();
+  if (!nom) { toast('⚠ Escribe un nombre'); return; }
+  const row = { id:Date.now(), nom, tel:document.getElementById('s-tel').value.trim(), prod:document.getElementById('s-prod').value, est:document.getElementById('s-est').value, orig:document.getElementById('s-orig').value, notas:document.getElementById('s-notas').value.trim(), fecha:new Date().toLocaleDateString('es-ES') };
+  segs.push(row); saveSeg(); renderSeg(); updateKPIs(); syncToSheets('add', row);
+  ['s-nom','s-tel','s-notas'].forEach(id => document.getElementById(id).value = '');
+  toast('✓ Añadido al pipeline');
+}
+function segEstado(id, est) {
+  const s = segs.find(x => x.id===id); if (!s) return;
+  if (est==='cita') { abrirModalCita(s); return; }
+  s.est = est; saveSeg(); renderSeg(); updateKPIs(); syncToSheets('update', s);
+}
+function segDel(id) {
+  if (!confirm('¿Eliminar este contacto?')) return;
+  const s = segs.find(x=>x.id===id);
+  segs = segs.filter(x=>x.id!==id); saveSeg(); renderSeg(); updateKPIs();
+  if (s) syncToSheets('delete', s);
+}
+function limpiarCerrados() { segs = segs.filter(s=>s.est!=='cerrado'); saveSeg(); renderSeg(); updateKPIs(); toast('✓ Cerrados eliminados'); }
+const EST_LABELS = {pendiente:'⏳ Pendiente',contactado:'📞 Contactado',cita:'📅 Cita',cerrado:'✅ Cerrado'};
+const EST_BADGES = {pendiente:'bg-orange',contactado:'bg-blue',cita:'bg-purple',cerrado:'bg-green'};
+function renderSeg() {
+  const filtro = document.getElementById('seg-filtro').value;
+  const q = (document.getElementById('seg-search').value||'').toLowerCase();
+  let lista = segs.filter(s=>(!filtro||s.est===filtro)&&(!q||s.nom.toLowerCase().includes(q)));
+  document.getElementById('seg-total-txt').textContent = `${lista.length} contacto${lista.length!==1?'s':''}`;
+  const c = {pendiente:0,contactado:0,cita:0,cerrado:0};
+  segs.forEach(s=>c[s.est]++);
+  ['pend','cont','cita','cerr'].forEach((k,i)=>{ const keys=['pendiente','contactado','cita','cerrado']; document.getElementById('cnt-'+k).textContent=c[keys[i]]; });
+  if (!lista.length) { document.getElementById('seg-lista').innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Sin contactos — añade el primero arriba</div>'; return; }
+  document.getElementById('seg-lista').innerHTML = lista.map(s=>`
+    <div class="pip-card">
+      <div class="pip-avatar">${s.nom[0].toUpperCase()}</div>
+      <div class="pip-info">
+        <div class="pip-name">${s.nom}</div>
+        <div class="pip-meta">${s.tel||'Sin teléfono'} · ${s.prod} · ${s.orig} · ${s.fecha}</div>
+        ${s.notas?`<div class="pip-meta" style="font-style:italic;">${s.notas}</div>`:''}
+        ${s.est==='cita'&&s.fechaCita?`<div class="pip-meta" style="color:#a78bfa;font-weight:700;">📅 Cita: ${formatFechaCita(s.fechaCita)}</div>`:''}
+      </div>
+      <div style="margin:0 8px;"><span class="badge ${EST_BADGES[s.est]}">${EST_LABELS[s.est]}</span></div>
+      <div class="pip-actions">
+        ${s.tel?`<a class="btn btn-green btn-xs" href="tel:${s.tel.replace(/\s/g,'')}">📞</a>`:''}
+        ${s.tel?`<a class="btn btn-ghost btn-xs" href="https://wa.me/34${s.tel.replace(/[\s+-]/g,'').replace(/^34/,'')}" target="_blank">💬</a>`:''}
+        ${s.est==='cita'&&s.fechaCita?`<a class="btn btn-xs" style="background:#4f46e5;color:#fff;" href="${generarCalendarUrl(s,s.fechaCita)}" target="_blank">📅</a>`:''}
+        <select onchange="segEstado(${s.id},this.value)" style="padding:4px 8px;font-size:.7rem;width:auto;border-radius:6px;">
+          <option value="">Cambiar…</option>
+          <option value="pendiente">⏳ Pendiente</option>
+          <option value="contactado">📞 Contactado</option>
+          <option value="cita">📅 Cita</option>
+          <option value="cerrado">✅ Cerrado</option>
+        </select>
+        <button class="btn btn-ghost btn-xs" onclick="segDel(${s.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function exportSeg() {
+  const rows = [['Nombre','Tel','Producto','Estado','Origen','Notas','Fecha']];
+  segs.forEach(s=>rows.push([s.nom,s.tel,s.prod,s.est,s.orig,s.notas,s.fecha]));
+  const csv = rows.map(r=>r.map(x=>`"${(x||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='crm-fabian-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+}
+function updateKPIs() {
+  const c = {pendiente:0,contactado:0,cita:0,cerrado:0};
+  segs.forEach(s=>c[s.est]++);
+  document.getElementById('kpiPend').textContent    = c.pendiente;
+  document.getElementById('kpiContact').textContent = c.contactado;
+  document.getElementById('kpiCita').textContent    = c.cita;
+  document.getElementById('kpiCerr').textContent    = c.cerrado;
+}
+
+// ══ BOT IA ══
+let botNums = JSON.parse(localStorage.getItem('botNums') || '[]');
+let botNeg  = JSON.parse(localStorage.getItem('botNeg')  || '[]');
+let botRunning=false, botPaused=false, botTimer=null, botEditId=null, botFilter='';
+function saveBot(){ localStorage.setItem('botNums',JSON.stringify(botNums)); }
+function saveNeg() { localStorage.setItem('botNeg', JSON.stringify(botNeg)); }
+
+// Migrar registros antiguos
+(function botMigrate(){
+  let changed=false;
+  botNums.forEach(b=>{
+    if(b.interes===undefined){b.interes=0;changed=true;}
+    if(b.prioridad===undefined){b.prioridad='media';changed=true;}
+    if(b.proxima_accion===undefined){b.proxima_accion='Llamar';changed=true;}
+    if(b.fecha_proxima===undefined){b.fecha_proxima='';changed=true;}
+    if(b.operador===undefined){b.operador='bot';changed=true;}
+    if(b.notas===undefined){b.notas='';changed=true;}
+    if(b.intentos===undefined){b.intentos=0;changed=true;}
+    // 'lanzada' ya es estado valido — no migrar automaticamente, el sync lo resuelve
+    if(b.est==='callback'){b.est='potencial';changed=true;}
+    if(b.est==='excluido'){b.est='no_contactar';changed=true;}
+    if(b.est==='error_vapi'){b.est='invalido';changed=true;}
+  });
+  if(changed) saveBot();
+})();
+
+function botGuardar(){
+  const txt=document.getElementById('bot-nuevos').value.trim(); if(!txt) return;
+  const op=document.getElementById('bot-nuevo-op').value, prio=document.getElementById('bot-nuevo-prio').value;
+  const negSet=new Set(botNeg.map(x=>x.num)), existSet=new Set(botNums.map(x=>x.num));
+  let added=0;
+  txt.split('\n').map(l=>l.trim().replace(/\s/g,'')).filter(l=>l.length>=9).forEach(num=>{
+    if(!negSet.has(num)&&!existSet.has(num)){
+      botNums.push({id:Date.now()+Math.random(),num,est:'pendiente',interes:0,prioridad:prio,proxima_accion:'Llamar',fecha_proxima:'',operador:op,notas:'',intentos:0,fecha:null,callId:''});
+      added++;
+    }
+  });
+  saveBot(); botRender(); botStats();
+  document.getElementById('bot-nuevos').value='';
+  document.getElementById('bot-add-msg').textContent=`✓ ${added} añadidos`;
+  setTimeout(()=>document.getElementById('bot-add-msg').textContent='',2500);
+}
+function botImportCSV(e){
+  const f=e.target.files[0]; if(!f) return;
+  const op=document.getElementById('bot-nuevo-op').value, prio=document.getElementById('bot-nuevo-prio').value;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const negSet=new Set(botNeg.map(x=>x.num)), existSet=new Set(botNums.map(x=>x.num)); let added=0;
+    ev.target.result.split('\n').forEach(line=>{ line.split(/[,;]/).forEach(p=>{ const num=p.trim().replace(/\s/g,''); if(num.length>=9&&!negSet.has(num)&&!existSet.has(num)){botNums.push({id:Date.now()+Math.random(),num,est:'pendiente',interes:0,prioridad:prio,proxima_accion:'Llamar',fecha_proxima:'',operador:op,notas:'',intentos:0,fecha:null,callId:''});added++;} }); });
+    saveBot(); botRender(); botStats(); toast(`✓ ${added} números importados`);
+  };
+  r.readAsText(f);
+}
+function botNegra(){
+  const num=document.getElementById('bot-neg-num').value.trim(); if(!num) return;
+  botNeg.push({num,mot:document.getElementById('bot-neg-mot').value,fecha:new Date().toLocaleDateString('es-ES')});
+  botNums=botNums.filter(x=>x.num!==num); saveBot(); saveNeg(); botRender(); botStats(); botRenderNeg();
+  document.getElementById('bot-neg-num').value='';
+}
+function botOpenEdit(id){
+  const b=botNums.find(x=>x.id==id); if(!b) return;
+  botEditId=id;
+  document.getElementById('bot-edit-num').textContent='📞 '+b.num;
+  document.getElementById('edit-est').value=b.est||'pendiente';
+  document.getElementById('edit-interes').value=b.interes||0;
+  document.getElementById('edit-prio').value=b.prioridad||'media';
+  document.getElementById('edit-accion').value=b.proxima_accion||'Ninguna';
+  document.getElementById('edit-fecha-prox').value=b.fecha_proxima||'';
+  document.getElementById('edit-notas').value=b.notas||'';
+  const card=document.getElementById('bot-edit-card'); card.style.display=''; card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function botSaveEdit(){
+  const b=botNums.find(x=>x.id==botEditId); if(!b) return;
+  b.est=document.getElementById('edit-est').value;
+  b.interes=parseInt(document.getElementById('edit-interes').value)||0;
+  b.prioridad=document.getElementById('edit-prio').value;
+  b.proxima_accion=document.getElementById('edit-accion').value;
+  b.fecha_proxima=document.getElementById('edit-fecha-prox').value;
+  b.notas=document.getElementById('edit-notas').value;
+  saveBot(); botRender(); botStats(); botCloseEdit(); toast('✓ Lead actualizado');
+}
+function botCloseEdit(){ botEditId=null; document.getElementById('bot-edit-card').style.display='none'; }
+function botDel(id){ if(!confirm('¿Eliminar este lead?')) return; botNums=botNums.filter(x=>x.id!=id); saveBot(); botRender(); botStats(); }
+function botChip(est){
+  botFilter=est;
+  document.querySelectorAll('[data-chip]').forEach(el=>{ const active=el.dataset.chip===est; el.style.fontWeight=active?'800':'600'; el.style.borderWidth=active?'2px':'1px'; el.style.opacity=active?'1':'0.7'; });
+  botRender();
+}
+function botQuick(id,est){
+  const b=botNums.find(x=>x.id==id); if(!b) return;
+  b.est=est; b.fecha=b.fecha||new Date().toLocaleDateString('es-ES');
+  const accMap={caliente:'Llamar',potencial:'WhatsApp',receptivo:'Llamar',no_contesta:'Llamar',no_contactar:'Ninguna',invalido:'Ninguna'};
+  if(accMap[est]) b.proxima_accion=accMap[est];
+  saveBot(); botRender(); botStats();
+  const cfg=EST_CFG[est]||{}; toast(`${cfg.emoji||''} ${b.num} → ${cfg.label||est}`);
+}
+function botStats(){
+  const c={lanzada:0,pendiente:0,caliente:0,cita:0,potencial:0,receptivo:0,no_contesta:0,no_contactar:0,invalido:0};
+  botNums.forEach(b=>{if(c[b.est]!==undefined)c[b.est]++;});
+  document.getElementById('bot-pend-num').textContent=c.pendiente+c.lanzada;
+  document.getElementById('bot-pend-sub').textContent=(c.pendiente+c.lanzada)===0?'Sin números pendientes':`${botNums.length} total · ${c.pendiente} pendientes · ${c.lanzada} en curso`;
+  document.getElementById('bs-pend').textContent=c.pendiente;
+  document.getElementById('bs-caliente').textContent=c.caliente;
+  document.getElementById('bs-cita').textContent=c.cita;
+  document.getElementById('bs-total').textContent=botNums.length;
+  document.getElementById('bs-potencial').textContent=c.potencial;
+  document.getElementById('bs-receptivo').textContent=c.receptivo;
+  document.getElementById('bs-nocontesta').textContent=c.no_contesta;
+  document.getElementById('bs-bloq').textContent=c.no_contactar+c.invalido;
+  const hot=document.getElementById('bot-hot-banner');
+  if(c.caliente>0){ hot.style.display='flex'; document.getElementById('bot-hot-txt').textContent=`🔥 Tienes ${c.caliente} lead${c.caliente>1?'s':''} caliente${c.caliente>1?'s':''}`; }
+  else hot.style.display='none';
+}
+const EST_CFG={
+  lanzada:{label:'Llamada en curso',color:'#a78bfa',bg:'rgba(167,139,250,0.08)',emoji:'📡'},
+  pendiente:{label:'Pendiente',color:'#facc15',bg:'rgba(250,204,21,0.06)',emoji:'⏳'},
+  caliente:{label:'Caliente',color:'#f59e0b',bg:'rgba(245,158,11,0.10)',emoji:'🔥'},
+  cita:{label:'Cita ✓',color:'#22c55e',bg:'rgba(34,197,94,0.10)',emoji:'✅'},
+  potencial:{label:'Potencial',color:'#3b82f6',bg:'rgba(59,130,246,0.08)',emoji:'💙'},
+  receptivo:{label:'Receptivo',color:'#06b6d4',bg:'rgba(6,182,212,0.07)',emoji:'🟢'},
+  no_contesta:{label:'No contesta',color:'#f97316',bg:'rgba(249,115,22,0.06)',emoji:'📵'},
+  no_contactar:{label:'No contactar',color:'#ef4444',bg:'rgba(239,68,68,0.06)',emoji:'🚫'},
+  invalido:{label:'Inválido',color:'#6b7280',bg:'rgba(107,114,128,0.04)',emoji:'❌'}
+};
+function starsHtml(n){ return n?'<span style="font-size:.72rem;">'+'⭐'.repeat(n)+'</span>':'<span style="color:var(--muted);font-size:.7rem;">—</span>'; }
+function botRender(){
+  const q=(document.getElementById('bot-search').value||'').toLowerCase();
+  const lista=botNums.filter(b=>{ if(botFilter&&b.est!==botFilter) return false; if(q&&!b.num.includes(q)&&!(b.notas||'').toLowerCase().includes(q)) return false; return true; });
+  const tbody=document.getElementById('bot-tbody');
+  if(!botNums.length){ tbody.innerHTML=`<div style="padding:32px;text-align:center;color:var(--muted);"><div style="font-size:2rem;margin-bottom:8px;">📋</div><div>Sin leads — añade números en el panel derecho</div></div>`; return; }
+  if(!lista.length){ tbody.innerHTML=`<div style="padding:24px;text-align:center;color:var(--muted);">Sin leads con este filtro — <button onclick="botChip('')" style="background:none;border:none;color:#60a5fa;cursor:pointer;font-size:.78rem;text-decoration:underline;">ver todos</button></div>`; return; }
+  const ORDER={caliente:0,cita:1,potencial:2,receptivo:3,pendiente:4,no_contesta:5,no_contactar:6,invalido:7};
+  const sorted=[...lista].sort((a,b)=>(ORDER[a.est]||9)-(ORDER[b.est]||9));
+  tbody.innerHTML=sorted.slice(0,300).map((b,i)=>{
+    const cfg=EST_CFG[b.est]||EST_CFG.pendiente;
+    const accion=b.proxima_accion&&b.proxima_accion!=='Ninguna'?`<span style="font-size:.69rem;color:#94a3b8;">${b.proxima_accion}</span>`:'<span style="color:var(--muted);font-size:.68rem;">—</span>';
+    const fechaStr=b.fecha_proxima||b.fecha||'';
+    const fecha=fechaStr?`<div style="font-size:.62rem;color:${b.fecha_proxima?'#facc15':'var(--muted)'};">${fechaStr}</div>`:'';
+    const intentos=b.intentos>0?`<span style="font-size:.6rem;color:var(--muted);"> ×${b.intentos}</span>`:'';
+    const qBtns=[['caliente','🔥','#f59e0b'],['potencial','💙','#3b82f6'],['receptivo','🟢','#06b6d4'],['no_contesta','📵','#f97316']].map(([est,ico,col])=>{
+      const active=b.est===est;
+      return `<button onclick="botQuick(${b.id},'${est}')" style="width:27px;height:27px;border-radius:50%;border:${active?'2px':'1px'} solid ${col}${active?'':'44'};background:${active?col+'33':'transparent'};cursor:pointer;font-size:.78rem;">${ico}</button>`;
+    }).join('');
+    return `<div style="display:grid;grid-template-columns:30px 148px 138px 58px 110px 168px;padding:10px 13px;border-bottom:1px solid #0e1520;align-items:center;background:${cfg.bg};min-width:652px;">
+      <span style="color:var(--muted);font-size:.67rem;">${i+1}</span>
+      <div><div style="font-size:.78rem;font-family:monospace;">${b.num}${intentos}</div>${fecha}</div>
+      <span><span style="display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:.63rem;font-weight:700;color:${cfg.color};border:1px solid ${cfg.color}55;background:${cfg.color}18;">${cfg.emoji} ${cfg.label}</span></span>
+      <span>${starsHtml(b.interes)}</span>
+      <span>${accion}</span>
+      <div style="display:flex;gap:4px;align-items:center;justify-content:center;">
+        ${qBtns}
+        <button onclick="botOpenEdit(${b.id})" style="width:27px;height:27px;border-radius:50%;border:1px solid #33415544;background:transparent;color:#64748b;cursor:pointer;font-size:.72rem;">✏️</button>
+        <button onclick="botDel(${b.id})" style="width:27px;height:27px;border-radius:50%;border:1px solid #ef444422;background:transparent;color:#ef444466;cursor:pointer;font-size:.72rem;">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function botRenderNeg(){
+  document.getElementById('neg-total').textContent=botNeg.length;
+  document.getElementById('bot-neg-lista').innerHTML=botNeg.slice(-10).reverse().map(n=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>${n.num}</span><span style="color:var(--muted);">${n.mot} · ${n.fecha}</span></div>`).join('');
+}
+function botToggle(){
+  if(botRunning) return;
+  const pendientes=botNums.filter(b=>b.est==='pendiente');
+  if(!pendientes.length){ toast('⚠ Sin números pendientes'); return; }
+  botRunning=true; botPaused=false;
+  document.getElementById('btn-lanzar').style.display='none';
+  document.getElementById('btn-pause').style.display='';
+  document.getElementById('btn-stop').style.display='';
+  document.getElementById('bot-prog').style.display='';
+  botSimRun(pendientes,0);
+}
+async function botSimRun(lista,idx){
+  if(!botRunning||idx>=lista.length){ botStop(); return; }
+  if(botPaused){ botTimer=setTimeout(()=>botSimRun(lista,idx),500); return; }
+  const b=lista[idx];
+  const pct=Math.round((idx+1)/lista.length*100);
+  document.getElementById('bot-prog-pct').textContent=pct+'%';
+  document.getElementById('bot-prog-fill').style.width=pct+'%';
+  document.getElementById('bot-prog-txt').textContent=`Llamando ${b.num} (${idx+1}/${lista.length})`;
+  document.getElementById('bot-prog-msg').textContent='Conectando con Vapi...';
+  b.intentos=(b.intentos||0)+1;
+  try {
+    const resp=await fetch('https://api.vapi.ai/call',{method:'POST',headers:{'Authorization':'Bearer e6b3d78b-b703-4b0d-86ed-e8b68996caa5','Content-Type':'application/json'},body:JSON.stringify({assistantId:'c8801071-f5ca-468f-962b-e084e716ebaa',phoneNumberId:'ca345c6f-8911-4be3-945d-a6b25b24706d',customer:{number:b.num}})});
+    const data=await resp.json();
+    if(resp.ok&&data.id){ b.est='lanzada'; b.fecha=new Date().toLocaleDateString('es-ES'); b.callId=data.id; document.getElementById('bot-prog-msg').textContent=`✓ Llamada lanzada a ${b.num}`; }
+    else{ b.est='invalido'; document.getElementById('bot-prog-msg').textContent=`⚠ Error Vapi: ${data.message||JSON.stringify(data)}`; }
+  } catch(e){ b.est='invalido'; document.getElementById('bot-prog-msg').textContent=`⚠ Error: ${e.message}`; }
+  saveBot(); botRender(); botStats();
+  const delay=(parseInt(document.getElementById('bot-delay').value)||15)*1000;
+  botTimer=setTimeout(()=>botSimRun(lista,idx+1),delay);
+}
+function botPause(){ botPaused=!botPaused; document.getElementById('btn-pause').textContent=botPaused?'▶ Reanudar':'⏸ Pausar'; }
+function botStop(){
+  botRunning=false; botPaused=false; clearTimeout(botTimer);
+  document.getElementById('btn-lanzar').style.display='';
+  document.getElementById('btn-pause').style.display='none';
+  document.getElementById('btn-stop').style.display='none';
+  document.getElementById('bot-prog').style.display='none';
+  botRender(); botStats();
+}
+async function botSyncResultados(){
+  const btn = document.getElementById('btn-sync');
+  const conCallId = botNums.filter(b => b.callId);
+  if(!conCallId.length){ toast('⚠ No hay llamadas con ID para sincronizar'); return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Sincronizando...';
+  const VAPI_KEY = 'e6b3d78b-b703-4b0d-86ed-e8b68996caa5';
+
+  // Mapa Vapi endedReason → estado panel
+  const REASON_MAP = {
+    'twilio-failed-to-connect-call': 'invalido',
+    'customer-did-not-answer':       'no_contesta',
+    'voicemail':                     'no_contesta',
+    'customer-busy':                 'no_contesta',
+    'silence-timed-out':             'no_contesta',
+  };
+
+  // Mapa clasificacion bot → estado panel
+  const CLASIF_MAP = {
+    'CITA_CONFIRMADA':         'cita',
+    'INTERESADO_CALLBACK':     'potencial',
+    'NO_TIENE_SEGURO_DECESOS': 'caliente',
+    'NO_INTERESADO':           'no_contactar',
+    'NO_CONTESTA':             'no_contesta',
+  };
+
+  let actualizados = 0, errores = 0;
+
+  for(const b of conCallId){
+    try {
+      const r = await fetch(`https://api.vapi.ai/call/${b.callId}`, {
+        headers: { 'Authorization': 'Bearer ' + VAPI_KEY }
+      });
+      if(!r.ok){ errores++; continue; }
+      const call = await r.json();
+      const reason    = call.endedReason || '';
+      const analysis  = call.analysis || {};
+      const structured = analysis.structuredData || {};
+      const clasif    = structured.clasificacion || structured.classification || '';
+      const summary   = analysis.summary || '';
+
+      let nuevoEst = b.est; // por defecto no cambia
+
+      if(REASON_MAP[reason]){
+        nuevoEst = REASON_MAP[reason];
+      } else if(reason === 'customer-ended-call' || reason === 'call.in-progress.twilio-completed-call'){
+        // Hubo conversacion real — usar clasificacion del bot
+        if(CLASIF_MAP[clasif]){
+          nuevoEst = CLASIF_MAP[clasif];
+        } else {
+          // Clasificacion no disponible — inferir por summary
+          const s = summary.toLowerCase();
+          if(s.includes('cita') || s.includes('appointment') || s.includes('confirmed'))  nuevoEst = 'cita';
+          else if(s.includes('callback') || s.includes('otro momento') || s.includes('llame'))  nuevoEst = 'potencial';
+          else if(s.includes('no interesa') || s.includes('not interested') || s.includes('molest'))  nuevoEst = 'no_contactar';
+          else  nuevoEst = 'no_contesta'; // colgaron sin conversacion clara
+        }
+      }
+
+      if(nuevoEst !== b.est){
+        b.est = nuevoEst;
+        b.fecha = b.fecha || new Date().toLocaleDateString('es-ES');
+        actualizados++;
+      }
+    } catch(e){ errores++; }
+
+    // Pausa pequeña para no saturar la API
+    await new Promise(res => setTimeout(res, 120));
+  }
+
+  saveBot(); botRender(); botStats();
+  btn.disabled = false; btn.textContent = '🔄 Sincronizar';
+  toast(`✅ Sincronizado: ${actualizados} actualizados · ${errores} errores · ${conCallId.length} revisados`);
+}
+
+async function botTestCall(){
+  const num=document.getElementById('test-num').value.trim();
+  if(!num){ document.getElementById('test-status').innerHTML='<span style="color:#f87171;">⚠ Introduce un número</span>'; return; }
+  const btn=document.getElementById('btn-test'), st=document.getElementById('test-status');
+  btn.disabled=true; btn.textContent='⏳ Conectando...';
+  st.innerHTML='<span style="color:#a78bfa;">Lanzando llamada de prueba...</span>';
+  try {
+    const resp=await fetch('https://api.vapi.ai/call',{method:'POST',headers:{'Authorization':'Bearer e6b3d78b-b703-4b0d-86ed-e8b68996caa5','Content-Type':'application/json'},body:JSON.stringify({assistantId:'c8801071-f5ca-468f-962b-e084e716ebaa',phoneNumberId:'ca345c6f-8911-4be3-945d-a6b25b24706d',customer:{number:num}})});
+    const data=await resp.json();
+    if(resp.ok&&data.id){ st.innerHTML=`<span style="color:#4ade80;">✅ Llamando a ${num}</span><br><span style="color:var(--muted);font-size:.67rem;">ID: ${data.id.slice(0,18)}...</span>`; toast(`✅ Llamada lanzada a ${num}`); }
+    else st.innerHTML=`<span style="color:#f87171;">⚠ ${data.message||'Error desconocido'}</span>`;
+  } catch(e){ st.innerHTML=`<span style="color:#f87171;">⚠ Error: ${e.message}</span>`; }
+  btn.disabled=false; btn.textContent='📞 LLAMAR AHORA';
+}
+function botResetHoy(){
+  const nc=botNums.filter(b=>b.est==='no_contesta').length;
+  if(!nc){ toast('Sin leads "No contesta" que reintentar'); return; }
+  if(!confirm(`¿Resetear ${nc} leads "No contesta" a Pendiente?`)) return;
+  botNums.forEach(b=>{ if(b.est==='no_contesta') b.est='pendiente'; });
+  saveBot(); botRender(); botStats(); toast(`✓ ${nc} leads listos para reintentar`);
+}
+function botExport(){
+  const rows=[['Número','Estado','Interés','Prioridad','Próx. Acción','Fecha Próxima','Operador','Intentos','Notas','Fecha Llamada','Call ID']];
+  botNums.forEach(b=>rows.push([b.num,b.est,b.interes||0,b.prioridad||'media',b.proxima_accion||'',b.fecha_proxima||'',b.operador||'bot',b.intentos||0,(b.notas||'').replace(/,/g,' '),b.fecha||'',b.callId||'']));
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='leads-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+}
+function botExportNeg(){
+  const csv=['Número,Motivo,Fecha'].concat(botNeg.map(n=>`${n.num},${n.mot},${n.fecha}`)).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='lista-negra.csv'; a.click();
+}
+
+// ══ CAPTACIÓN ══
+function genCampana(){
+  const prod=document.getElementById('c-prod').value, pub=document.getElementById('c-pub').value;
+  const obj=document.getElementById('c-obj').value, tono=document.getElementById('c-tono').value;
+  const oferta=document.getElementById('c-oferta').value;
+  const ofertaLine=oferta?`\n✅ ${oferta}`:'';
+  const fb=document.getElementById('c-fb').checked, wa=document.getElementById('c-wa').checked;
+  const tonoMap={'Cercano y de confianza':'👋','Profesional y formal':'💼','Urgente / oferta':'🔥','Emocional / protección':'❤️'};
+  const emoji=tonoMap[tono]||'✨';
+  const fbTxt=`${emoji} ${prod} para ${pub} en Zaragoza\n\n¿Sabes cuánto pagas de más por tu seguro?\n\nSoy Fabián, asesor de Ocaso en Zaragoza, y ayudo a familias y negocios a estar bien protegidos sin pagar de más.${ofertaLine}\n\n📞 Un análisis gratuito de 15 minutos. Sin compromiso.\n\n👇 Escríbeme o llama ahora\n\n#SeguroZaragoza #Ocaso #${prod.replace(/ /g,'')}`;
+  const waTxt=`Hola [NOMBRE] 👋\n\nSoy Fabián, asesor de Seguros Ocaso en Zaragoza.\n\nTe escribo porque creo que puedo ahorrarte dinero en tu ${prod.toLowerCase()}.${oferta?`\n\n${oferta}.`:''}\n\n¿Te puedo llamar 10 minutos para contarte sin compromiso?\n\nUn saludo 😊`;
+  let html='';
+  if(fb) html+=`<div class="copy-result"><div class="copy-platform">📘 Facebook / Instagram</div><div class="copy-text" id="gen-fb">${fbTxt}</div><div class="copy-actions"><button class="btn btn-ghost btn-sm" onclick="copiarEl('gen-fb')">📋 Copiar</button><a class="btn btn-ghost btn-sm" href="https://business.facebook.com/latest/posts/published_posts" target="_blank">Publicar en Meta →</a></div></div>`;
+  if(wa) html+=`<div class="copy-result"><div class="copy-platform">💬 WhatsApp</div><div class="copy-text" id="gen-wa">${waTxt}</div><div class="copy-actions"><button class="btn btn-ghost btn-sm" onclick="copiarEl('gen-wa')">📋 Copiar</button></div></div>`;
+  document.getElementById('c-resultado').innerHTML=html||'<div class="card" style="text-align:center;padding:30px;color:var(--muted);">Selecciona al menos un canal</div>';
+}
+const WA_PLTS={
+  hogar:'Hola [nombre] 👋\n\nSoy Fabián de Seguros Ocaso Zaragoza. Quería avisarte que tenemos una oferta especial en seguro de hogar este mes.\n\n¿Te puedo llamar 5 min para contártelo?\n\nUn saludo 😊',
+  cita:'Hola [nombre] ✅\n\nTe confirmo nuestra cita para el [fecha] a las [hora].\n\nEstaré encantado de atenderte. ¡Hasta pronto! 👋',
+  seguimiento:'Hola [nombre], soy Fabián de Ocaso 😊\n\nHace unos días hablamos sobre tu seguro. ¿Has podido pensarlo?\n\nEstoy a tu disposición sin ningún compromiso.',
+  cumple:'¡Feliz cumpleaños [nombre]! 🎉\n\nUn abrazo enorme desde Seguros Ocaso Zaragoza. ¡Que tengas un día estupendo! 🥳',
+  renovacion:'Hola [nombre] 👋\n\nSoy Fabián de Ocaso. Te aviso que tu póliza de [producto] vence el [fecha].\n\nLlámame o escríbeme para renovarla sin interrupciones. ¡Un saludo! 😊'
+};
+function loadWAPlt(){ const v=document.getElementById('wa-plt').value; if(WA_PLTS[v]) document.getElementById('wa-msg').value=WA_PLTS[v]; }
+function usarWA(key){ document.getElementById('wa-msg').value=WA_PLTS[key]||''; document.getElementById('wa-plt').value=key; }
+function abrirWA(){
+  const num=document.getElementById('wa-num').value.trim().replace(/\D/g,'');
+  const msg=encodeURIComponent(document.getElementById('wa-msg').value);
+  if(num) window.open(`https://wa.me/${num}?text=${msg}`,'_blank'); else window.open('https://web.whatsapp.com','_blank');
+}
+
+// ══ SCRIPTS CLAUDE ══
+const SCRIPTS_DATA=[
+  {nom:'🌅 monday-brief — Planifica la semana',cuando:'Cada lunes',cmd:'/small-business:monday-brief',txt:`Soy Fabián Morales, asesor de Seguros Ocaso en Zaragoza.\n\nInicio de semana del [FECHA].\n- Leads nuevos pendientes en el CRM: [NÚMERO]\n- Citas conseguidas por el bot: [NÚMERO]\n- Pólizas que vencen esta semana: [NÚMERO]\n\nAyúdame a organizar la semana: prioridades, objetivos y plan de ataque.`},
+  {nom:'🏁 friday-brief — Cierra la semana',cuando:'Cada viernes',cmd:'/small-business:friday-brief',txt:`Soy Fabián Morales, asesor de Seguros Ocaso en Zaragoza.\n\nCierre de semana del [FECHAS].\n- Llamadas realizadas: [NÚMERO]\n- Pólizas cerradas: [NÚMERO]\n- Citas agendadas: [NÚMERO]\n- Leads sin contactar: [NÚMERO]\n\n¿Qué funcionó? ¿Qué mejorar el lunes?`},
+  {nom:'🎯 lead-triage — Clasifica leads',cuando:'Cuando llegan leads nuevos',cmd:'/small-business:lead-triage',txt:`Soy Fabián Morales, asesor de Seguros Ocaso en Zaragoza.\n\nTengo estos leads nuevos:\nLead 1: [NOMBRE], zona [BARRIO], interesado en [PRODUCTO], origen: [BOT/WEB/IDEALISTA]\nLead 2: [NOMBRE], zona [BARRIO], interesado en [PRODUCTO], origen: [BOT/WEB/IDEALISTA]\n\nClasifícalos: ¿cuáles son más calientes? ¿En qué orden llamo? Argumento para cada uno.`},
+  {nom:'👥 customer-pulse — Estado de clientes',cuando:'Cada 2 semanas',cmd:'/small-business:customer-pulse',txt:`Soy Fabián Morales, asesor de Seguros Ocaso en Zaragoza.\nTengo [NÚMERO] clientes activos.\n\n- Renovaciones próximas (30 días): [NÚMERO]\n- Sin contactar en 2+ meses: [NÚMERO]\n- Potencial upsell: [NÚMERO]\n\nPlan de acción para los próximos 15 días.`},
+  {nom:'💰 close-month — Cierre mensual',cuando:'Último día del mes',cmd:'/small-business:close-month',txt:`Soy Fabián Morales, asesor de Seguros Ocaso en Zaragoza.\n\n[MES] 2026:\n- Pólizas nuevas: [NÚMERO]\n- Renovaciones: [NÚMERO]\n- Leads totales: [NÚMERO]\n- Conversión: [X]%\n\n¿Voy bien? ¿Qué ajustar en [MES SIGUIENTE]?`},
+];
+function renderScripts(){
+  document.getElementById('scripts-manual').innerHTML=SCRIPTS_DATA.map((s,i)=>`
+    <div class="script-blk">
+      <div class="script-hdr" onclick="toggleScript(${i})">
+        <div><div class="script-titulo">${s.nom}</div><div class="script-cuando">${s.cuando} · <span style="color:var(--accent);font-family:monospace;font-size:.72rem;">${s.cmd}</span></div></div>
+        <span id="sarr-${i}" style="color:var(--muted);">▸</span>
+      </div>
+      <div class="script-bdy" id="sbdy-${i}">
+        <div class="script-txt" id="stxt-${i}">${s.txt}</div>
+        <button class="btn btn-primary btn-sm btn-full" style="margin-top:10px;" onclick="copiarScript(${i})">📋 Copiar y pegar en Claude</button>
+      </div>
+    </div>`).join('');
+}
+function toggleScript(i){ const b=document.getElementById('sbdy-'+i),a=document.getElementById('sarr-'+i); const open=b.classList.toggle('open'); a.textContent=open?'▾':'▸'; }
+function copiarScript(i){ navigator.clipboard.writeText(document.getElementById('stxt-'+i).textContent).then(()=>toast('✓ Copiado — pégalo en Claude')); }
+
+// ══ CARTERA ══
+const N8N_CARTERA_READ  ='https://primary-production-55dc.up.railway.app/webhook/cartera-read';
+const N8N_CARTERA_WRITE ='https://primary-production-55dc.up.railway.app/webhook/cartera-write';
+const N8N_CARTERA_UPDATE='https://primary-production-55dc.up.railway.app/webhook/cartera-update';
+const N8N_CARTERA_DELETE='https://primary-production-55dc.up.railway.app/webhook/cartera-delete';
+let carteraEditingRow=null;
+let carteraClientes=JSON.parse(localStorage.getItem('carteraClientes')||'[]');
+function setCarteraSyncStatus(msg,ok){ const el=document.getElementById('cartera-sync-status'); if(el){el.textContent=msg;el.style.color=ok?'#4ade80':ok===null?'#fbbf24':'#f87171';} }
+function carteraFmtDate(str){ if(!str) return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(str)){const[y,m,d]=str.split('-');return `${d}/${m}/${y}`;} return str; }
+function carteraDias(fechaStr){
+  if(!fechaStr) return null;
+  try{ let d; if(fechaStr.includes('/')){const p=fechaStr.split('/');d=new Date(parseInt(p[2]),parseInt(p[1])-1,parseInt(p[0]));}else if(fechaStr.includes('-')){d=new Date(fechaStr);} if(!d||isNaN(d)) return null; const hoy=new Date();hoy.setHours(0,0,0,0); return Math.round((d-hoy)/86400000); }catch{return null;}
+}
+function carteraKPIs(){
+  const total=carteraClientes.length;
+  const activos=carteraClientes.filter(c=>(c.ESTADO||'').toLowerCase()!=='cancelada').length;
+  let mes=0,prox=0;
+  carteraClientes.forEach(c=>{ const d=carteraDias(c['FECHA VENCIMIENTO']||c['FECHA_VENCIMIENTO']||''); if(d===null) return; if(d>=0&&d<=31) mes++; else if(d>31&&d<=60) prox++; });
+  document.getElementById('ck-total').textContent=total;
+  document.getElementById('ck-activos').textContent=activos;
+  document.getElementById('ck-mes').textContent=mes;
+  document.getElementById('ck-prox').textContent=prox;
+}
+function carteraRender(){
+  const buscar=(document.getElementById('cartera-buscar')?.value||'').toLowerCase();
+  const fPoliza=(document.getElementById('cartera-filtro-poliza')?.value||'').toLowerCase();
+  const fEstado=(document.getElementById('cartera-filtro-estado')?.value||'').toLowerCase();
+  let lista=carteraClientes.filter(c=>{
+    const nom=(c.NOMBRE||'').toLowerCase(), pol=(c['PÓLIZA']||c.POLIZA||'').toLowerCase();
+    if(buscar&&!nom.includes(buscar)&&!pol.includes(buscar)) return false;
+    if(fPoliza&&pol!==fPoliza) return false;
+    if(fEstado){ const dias=carteraDias(c['FECHA VENCIMIENTO']||c['FECHA_VENCIMIENTO']||'');
+      if(fEstado==='activa'&&!(dias===null||dias>30)) return false;
+      if(fEstado==='vence pronto'&&!(dias!==null&&dias<=30&&dias>=0)) return false;
+      if(fEstado==='vencida'&&!(dias!==null&&dias<0)) return false; }
+    return true;
+  });
+  if(!lista.length){ document.getElementById('cartera-lista').innerHTML=`<div style="text-align:center;color:var(--muted);padding:40px 0;">No hay clientes que coincidan</div>`; return; }
+  const rows=lista.map(c=>{
+    const dias=carteraDias(c['FECHA VENCIMIENTO']||c['FECHA_VENCIMIENTO']||'');
+    let badge='',rowStyle='';
+    if(dias!==null){
+      if(dias<0){badge=`<span style="background:#ef444420;color:#f87171;padding:2px 7px;border-radius:5px;font-size:.7rem;">VENCIDA</span>`;rowStyle='border-left:3px solid #ef4444;';}
+      else if(dias<=7){badge=`<span style="background:#ef444420;color:#f87171;padding:2px 7px;border-radius:5px;font-size:.7rem;">🔴 ${dias}d</span>`;rowStyle='border-left:3px solid #ef4444;';}
+      else if(dias<=30){badge=`<span style="background:#fb923c20;color:#fb923c;padding:2px 7px;border-radius:5px;font-size:.7rem;">🟠 ${dias}d</span>`;rowStyle='border-left:3px solid #fb923c;';}
+      else if(dias<=60){badge=`<span style="background:#facc1520;color:#facc15;padding:2px 7px;border-radius:5px;font-size:.7rem;">🟡 ${dias}d</span>`;rowStyle='border-left:3px solid #facc15;';}
+      else{badge=`<span style="background:#4ade8020;color:#4ade80;padding:2px 7px;border-radius:5px;font-size:.7rem;">✓ Activa</span>`;}
+    }
+    const tel=c['TELÉFONO']||c.TELEFONO||'', nPol=c['Nº PÓLIZA']||c['N_POLIZA']||'', rowNum=c.row_number||'';
+    return `<tr style="${rowStyle}"><td style="font-weight:600;">${c.NOMBRE||''}</td><td><a href="tel:${tel}" style="color:#60a5fa;">${tel}</a></td><td><span style="background:#1e3a5f;padding:2px 8px;border-radius:5px;font-size:.75rem;">${c['PÓLIZA']||c.POLIZA||''}</span></td><td style="color:var(--muted);font-size:.8rem;">${nPol}</td><td style="font-size:.82rem;">${carteraFmtDate(c['FECHA VENCIMIENTO']||c['FECHA_VENCIMIENTO']||'')}</td><td>${badge}</td><td style="color:var(--muted);font-size:.75rem;">${carteraFmtDate(c['FECHA ALTA']||'')}</td><td style="display:flex;gap:4px;"><a class="btn btn-ghost btn-sm" href="https://wa.me/34${String(tel).replace(/\s/g,'')}" target="_blank" style="padding:3px 8px;">💬</a><button class="btn btn-ghost btn-sm" onclick="carteraEdit(${rowNum})" style="padding:3px 8px;">✏️</button><button class="btn btn-ghost btn-sm" onclick="carteraDelete(${rowNum},'${(c.NOMBRE||'').replace(/'/g,"\\'")}')" style="padding:3px 8px;color:#f87171;">🗑️</button></td></tr>`;
+  }).join('');
+  document.getElementById('cartera-lista').innerHTML=`<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.82rem;"><thead><tr style="background:#0d1829;color:var(--muted);text-align:left;"><th style="padding:8px 10px;">Nombre</th><th style="padding:8px 10px;">Teléfono</th><th style="padding:8px 10px;">Póliza</th><th style="padding:8px 10px;">Nº</th><th style="padding:8px 10px;">Vencimiento</th><th style="padding:8px 10px;">Estado</th><th style="padding:8px 10px;">Alta</th><th style="padding:8px 10px;"></th></tr></thead><tbody>${rows}</tbody></table></div><div style="text-align:right;color:var(--muted);font-size:.72rem;margin-top:8px;">${lista.length} cliente${lista.length!==1?'s':''}</div>`;
+}
+async function carteraLoad(){
+  setCarteraSyncStatus('⟳ Cargando...',null);
+  try{
+    const r=await fetch(N8N_CARTERA_READ,{headers:{'X-Secret':N8N_SECRET}});
+    const text=await r.text();
+    if(!text||!text.trim()){setCarteraSyncStatus('✓ Cartera vacía',true);return;}
+    const data=JSON.parse(text);
+    if(Array.isArray(data)&&data.length){carteraClientes=data;localStorage.setItem('carteraClientes',JSON.stringify(carteraClientes));}
+    carteraKPIs();carteraRender();
+    setCarteraSyncStatus(`✓ ${carteraClientes.length} clientes cargados`,true);
+    setTimeout(()=>setCarteraSyncStatus('✓ Sheets conectado',true),3000);
+  }catch(e){setCarteraSyncStatus('⚠ Sin conexión — datos locales',false);carteraKPIs();carteraRender();}
+}
+function carteraLimpiarForm(){
+  ['ct-nombre','ct-telefono','ct-alta','ct-npoliza','ct-vencimiento'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const sel=document.getElementById('ct-poliza');if(sel)sel.value='';
+  document.getElementById('cartera-save-status').textContent='';
+  carteraEditingRow=null;
+  const tit=document.getElementById('cartera-form-title');if(tit)tit.textContent='➕ Añadir cliente a la cartera';
+  const btn=document.getElementById('cartera-save-btn');if(btn)btn.textContent='💾 Guardar cliente';
+  const canBtn=document.getElementById('cartera-cancel-btn');if(canBtn)canBtn.style.display='none';
+}
+function carteraEdit(rowNum){
+  const c=carteraClientes.find(x=>x.row_number===rowNum);if(!c)return;
+  carteraEditingRow=rowNum;
+  function toInputDate(str){if(!str)return'';if(/^\d{4}-\d{2}-\d{2}$/.test(str))return str;const p=str.split('/');if(p.length===3)return`${p[2].padStart(4,'0')}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;return'';}
+  document.getElementById('ct-nombre').value=c.NOMBRE||'';
+  document.getElementById('ct-telefono').value=c['TELÉFONO']||c.TELEFONO||'';
+  document.getElementById('ct-poliza').value=c['PÓLIZA']||c.POLIZA||'';
+  document.getElementById('ct-npoliza').value=c['Nº PÓLIZA']||c.N_POLIZA||'';
+  document.getElementById('ct-vencimiento').value=toInputDate(c['FECHA VENCIMIENTO']||c.FECHA_VENCIMIENTO||'');
+  document.getElementById('ct-alta').value=toInputDate(c['FECHA ALTA']||'');
+  const tit=document.getElementById('cartera-form-title');if(tit)tit.textContent=`✏️ Editando: ${c.NOMBRE||''}`;
+  const btn=document.getElementById('cartera-save-btn');if(btn)btn.textContent='💾 Guardar cambios';
+  const canBtn=document.getElementById('cartera-cancel-btn');if(canBtn)canBtn.style.display='inline-flex';
+  document.getElementById('ct-nombre').scrollIntoView({behavior:'smooth',block:'center'});
+}
+async function carteraDelete(rowNum,nombre){
+  if(!confirm(`¿Eliminar a ${nombre} de la cartera?`)) return;
+  carteraClientes=carteraClientes.filter(c=>c.row_number!==rowNum);
+  localStorage.setItem('carteraClientes',JSON.stringify(carteraClientes));
+  carteraKPIs();carteraRender();
+  try{ await fetch(N8N_CARTERA_DELETE,{method:'POST',headers:{'Content-Type':'application/json','X-Secret':N8N_SECRET},body:JSON.stringify({row_number:rowNum})}); setTimeout(()=>carteraLoad(),1500); }
+  catch(e){console.warn('Delete remoto falló');}
+}
+async function carteraAdd(){
+  const nombre=document.getElementById('ct-nombre')?.value.trim(), telefono=document.getElementById('ct-telefono')?.value.trim(), poliza=document.getElementById('ct-poliza')?.value;
+  const npoliza=document.getElementById('ct-npoliza')?.value.trim(), alta=document.getElementById('ct-alta')?.value, vencimiento=document.getElementById('ct-vencimiento')?.value;
+  if(!nombre||!telefono||!poliza){document.getElementById('cartera-save-status').textContent='⚠ Nombre, teléfono y póliza son obligatorios';document.getElementById('cartera-save-status').style.color='#f87171';return;}
+  const altaFmt=carteraFmtDate(alta), vencFmt=carteraFmtDate(vencimiento);
+  const statusEl=document.getElementById('cartera-save-status');statusEl.textContent='⟳ Guardando...';statusEl.style.color='#fbbf24';
+  if(carteraEditingRow!==null){
+    const idx=carteraClientes.findIndex(c=>c.row_number===carteraEditingRow);
+    if(idx!==-1){carteraClientes[idx]={...carteraClientes[idx],'NOMBRE':nombre,'TELÉFONO':telefono,'PÓLIZA':poliza,'Nº PÓLIZA':npoliza,'FECHA VENCIMIENTO':vencFmt,'FECHA ALTA':altaFmt,'ESTADO':carteraClientes[idx].ESTADO||'Activa'};localStorage.setItem('carteraClientes',JSON.stringify(carteraClientes));carteraKPIs();carteraRender();}
+    try{await fetch(N8N_CARTERA_UPDATE,{method:'POST',headers:{'Content-Type':'application/json','X-Secret':N8N_SECRET},body:JSON.stringify({row_number:carteraEditingRow,nombre,telefono,poliza,npoliza,alta:altaFmt,vencimiento:vencFmt,estado:'Activa'})});statusEl.textContent='✓ Cliente actualizado';statusEl.style.color='#4ade80';}
+    catch(e){statusEl.textContent='⚠ Actualizado solo local';statusEl.style.color='#fb923c';}
+    setTimeout(()=>carteraLimpiarForm(),1500);
+  }else{
+    carteraClientes.push({'NOMBRE':nombre,'TELÉFONO':telefono,'PÓLIZA':poliza,'Nº PÓLIZA':npoliza,'FECHA VENCIMIENTO':vencFmt,'FECHA ALTA':altaFmt,'ESTADO':'Activa'});
+    localStorage.setItem('carteraClientes',JSON.stringify(carteraClientes));carteraKPIs();carteraRender();
+    try{await fetch(N8N_CARTERA_WRITE,{method:'POST',headers:{'Content-Type':'application/json','X-Secret':N8N_SECRET},body:JSON.stringify({nombre,telefono,poliza,npoliza,alta:altaFmt,vencimiento:vencFmt,estado:'Activa'})});statusEl.textContent='✓ Cliente guardado en Sheets';statusEl.style.color='#4ade80';setTimeout(()=>{carteraLimpiarForm();statusEl.textContent='';},2000);}
+    catch(e){statusEl.textContent='⚠ Guardado solo local';statusEl.style.color='#fb923c';}
+  }
+}
+
+// ══ VAPI SALDO ══
+async function fetchVapiBalance(){
+  const TOKEN='e6b3d78b-b703-4b0d-86ed-e8b68996caa5';
+  const el=document.getElementById('vapiSaldo');
+  const icon=document.getElementById('vapi-wallet-icon');
+  try{
+    const r=await fetch('https://api.vapi.ai/payment',{headers:{Authorization:'Bearer '+TOKEN}});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    const bal=data.balance??data.credits??0;
+    const saldo=parseFloat(bal).toFixed(2);
+    if(el) el.textContent='$'+saldo+' USD';
+    if(icon) icon.textContent=parseFloat(saldo)<1?'🔴':parseFloat(saldo)<5?'🟡':'🟢';
+  }catch(e){
+    if(el) el.textContent='Sin datos';
+    if(icon) icon.textContent='⚪';
+  }
+}
+
+// ══ CITAS ══
+function formatFechaCita(isoDate,hora){
+  if(!isoDate) return '';
+  const[y,m,d]=isoDate.split('-');
+  const dias=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  const dt=new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+  return `${dias[dt.getDay()]} ${d}/${m}/${y}${hora?' a las '+hora:''}`;
+}
+function generarCalendarUrl(nombre,fecha,hora,notas){
+  const base='https://calendar.google.com/calendar/render?action=TEMPLATE';
+  const title=encodeURIComponent('Cita seguros — '+nombre);
+  const details=encodeURIComponent(notas||'Cita agendada desde Centro de Mando');
+  if(!fecha||!hora) return `${base}&text=${title}&details=${details}`;
+  const h=hora.replace(':','');
+  const start=fecha.replace(/-/g,'')+`T${h}00`;
+  const endH=String(parseInt(hora)+1).padStart(2,'0');
+  const end=fecha.replace(/-/g,'')+`T${endH}${h.slice(2)}00`;
+  return `${base}&text=${title}&dates=${start}/${end}&details=${details}`;
+}
+function generarWAPostLlamada(num,nombre,fecha,hora){
+  const fechaStr=formatFechaCita(fecha,hora);
+  const msg=encodeURIComponent(`Hola ${nombre||''} 👋 Te confirmo nuestra cita el ${fechaStr}. Estaré encantado de atenderte. Un saludo, Fabián de Ocaso 😊`);
+  return `https://wa.me/34${String(num||'').replace(/\D/g,'')}?text=${msg}`;
+}
+function programarRecordatorio(num,nombre,fecha,hora){
+  fetch('https://primary-production-55dc.up.railway.app/webhook/recordatorio',{method:'POST',headers:{'Content-Type':'application/json','X-Secret':N8N_SECRET},body:JSON.stringify({num,nombre,fecha,hora})}).catch(()=>{});
+  toast('📅 Recordatorio programado');
+}
+
+// Modal cita (desde Pipeline — recibe objeto seg completo)
+let _citaLead=null;
+function abrirModalCita(lead){
+  _citaLead=lead;
+  const nomEl=document.getElementById('mc-nombre'); if(nomEl) nomEl.textContent=lead?.nom||'Lead';
+  const prodEl=document.getElementById('mc-prod'); if(prodEl) prodEl.textContent=lead?.prod||'';
+  ['mc-fecha','mc-notas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const m=document.getElementById('modal-cita'); if(m) m.style.display='flex';
+}
+function cerrarModalCita(){
+  const m=document.getElementById('modal-cita'); if(m) m.style.display='none';
+  _citaLead=null;
+}
+async function confirmarCita(){
+  const dtVal=document.getElementById('mc-fecha')?.value;
+  const notas=document.getElementById('mc-notas')?.value||'';
+  if(!dtVal){toast('⚠ Indica fecha y hora');return;}
+  const[fechaIso,horaStr]=dtVal.split('T');
+  const hora=horaStr?horaStr.slice(0,5):'';
+  const lead=_citaLead;
+  const nombre=lead?.nom||'Lead';
+  const tel=lead?.tel||'';
+  if(lead){lead.est='cita';saveSeg();renderSeg();updateKPIs();syncToSheets('update',lead);}
+  const calUrl=generarCalendarUrl(nombre,fechaIso,hora,notas);
+  const waUrl=generarWAPostLlamada(tel,nombre,fechaIso,hora);
+  const maInfo=document.getElementById('ma-info');if(maInfo) maInfo.textContent=`${nombre} · ${formatFechaCita(fechaIso,hora)}`;
+  const maCal=document.getElementById('ma-calendar');if(maCal) maCal.href=calUrl;
+  const maWa=document.getElementById('ma-wa');if(maWa) maWa.href=waUrl;
+  programarRecordatorio(tel,nombre,fechaIso,hora);
+  cerrarModalCita();
+  const ma=document.getElementById('modal-acciones');if(ma) ma.style.display='flex';
+}
+
+// Modal cita directa (desde Hoy — crea entrada en Pipeline)
+function abrirCitaDirecta(){
+  ['cd-nom','cd-tel','cd-fecha','cd-notas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const m=document.getElementById('modal-cita-directa'); if(m) m.style.display='flex';
+}
+function cerrarCitaDirecta(){
+  const m=document.getElementById('modal-cita-directa'); if(m) m.style.display='none';
+}
+async function confirmarCitaDirecta(){
+  const nombre=document.getElementById('cd-nom')?.value.trim();
+  const tel=document.getElementById('cd-tel')?.value.trim();
+  const dtVal=document.getElementById('cd-fecha')?.value;
+  const notas=document.getElementById('cd-notas')?.value||'';
+  if(!nombre||!dtVal){toast('⚠ Nombre y fecha son obligatorios');return;}
+  const[fechaIso,horaStr]=dtVal.split('T');
+  const hora=horaStr?horaStr.slice(0,5):'';
+  const prod=document.getElementById('cd-prod-d')?.value||'Seguro Hogar';
+  const orig=document.getElementById('cd-orig-d')?.value||'Otro';
+  const row={id:Date.now(),nom:nombre,tel,prod,est:'cita',orig,notas,fecha:new Date().toLocaleDateString('es-ES')};
+  segs.push(row);saveSeg();renderSeg();updateKPIs();syncToSheets('add',row);
+  window.open(generarCalendarUrl(nombre,fechaIso,hora,notas),'_blank');
+  if(tel){
+    setTimeout(()=>window.open(generarWAPostLlamada(tel,nombre,fechaIso,hora),'_blank'),600);
+    programarRecordatorio(tel,nombre,fechaIso,hora);
+  }
+  toast(`✅ Cita agendada con ${nombre} — añadida al Pipeline`);
+  cerrarCitaDirecta();
+}
+
+// ══ CRM ADMINISTRADORES DE FINCAS (tabla real Colegio Aragón) ══
+const CRM_ADM_KEY = 'crmAdministradoresZaragoza';
+function crmGuardar(){
+  const data={};
+  document.querySelectorAll('#crmTable [data-id][data-field]').forEach(el=>{
+    const id=el.dataset.id, field=el.dataset.field;
+    if(!data[id]) data[id]={};
+    data[id][field]=el.value;
+  });
+  localStorage.setItem(CRM_ADM_KEY,JSON.stringify(data));
+}
+function crmCargar(){
+  const raw=localStorage.getItem(CRM_ADM_KEY); if(!raw) return;
+  try{
+    const data=JSON.parse(raw);
+    Object.keys(data).forEach(id=>{
+      Object.keys(data[id]).forEach(field=>{
+        const el=document.querySelector(`#crmTable [data-id="${id}"][data-field="${field}"]`);
+        if(el) el.value=data[id][field];
+      });
+    });
+  }catch(e){}
+}
+function crmFiltrar(){
+  const q=(document.getElementById('crmSearch')?.value||'').toLowerCase();
+  const est=document.getElementById('crmFilter')?.value||'';
+  let pend=0,cont=0,cita=0,cerr=0;
+  document.querySelectorAll('#crmTable tbody tr').forEach(row=>{
+    const text=row.innerText.toLowerCase();
+    const rowEst=row.querySelector('.crm-estado')?.value||'Pendiente';
+    const ok=(!q||text.includes(q))&&(!est||rowEst===est);
+    row.style.display=ok?'':'none';
+    if(ok){
+      if(rowEst==='Pendiente') pend++;
+      else if(rowEst==='Contactado') cont++;
+      else if(rowEst==='Cita') cita++;
+      else if(rowEst==='Cerrado') cerr++;
+    }
+  });
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  s('adm-cnt-pend',pend); s('adm-cnt-cont',cont); s('adm-cnt-cita',cita); s('adm-cnt-cerr',cerr);
+}
+function crmExportar(){
+  const rows=[['#','Nombre','Direccion','Telefono','Oportunidad','Estado','Ult.contacto','Proxima accion','Notas']];
+  document.querySelectorAll('#crmTable tbody tr').forEach(row=>{
+    if(row.style.display==='none') return;
+    const tds=row.querySelectorAll('td');
+    rows.push([tds[0]?.innerText.trim()||'',tds[1]?.innerText.trim()||'',tds[2]?.innerText.trim()||'',tds[3]?.innerText.trim()||'',tds[4]?.innerText.trim()||'',row.querySelector('[data-field="estado"]')?.value||'',row.querySelector('[data-field="ultimo"]')?.value||'',row.querySelector('[data-field="proxima"]')?.value||'',row.querySelector('[data-field="notas"]')?.value||'']);
+  });
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='admins-zaragoza-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  toast('✓ CSV exportado');
+}
+// compatibilidad con código anterior (no se usa pero evita errores)
+let admins=[];function saveAdmins(){}function adminsRender(){}function adminAdd(){}function adminExport(){}
+
+// ══ SCRAPER ══
+const SCRAPER_SERVER = 'http://localhost:8765';
+async function scraperCheckServer(){
+  const txt=document.getElementById('scraper-srv-txt');
+  if(txt){txt.style.color='#fbbf24';txt.textContent='Comprobando...';}
+  try{
+    const r=await fetch(SCRAPER_SERVER+'/ping',{cache:'no-cache'});
+    const d=await r.json();
+    if(d.ok){
+      if(txt){txt.style.color='#4ade80';txt.textContent='✅ Servidor activo — los botones están listos';}
+    } else throw new Error();
+  }catch(e){
+    if(txt){txt.style.color='#f87171';txt.textContent='⚠ Servidor no activo — cierra y abre de nuevo con INICIAR CENTRO DE MANDO.bat';}
+  }
+}
+function scraperMostrarEstado(msg,ok){
+  const el=document.getElementById('scraper-estado');
+  if(!el) return;
+  el.style.display='block';
+  el.style.color=ok===true?'#4ade80':ok===null?'#fbbf24':'#f87171';
+  el.textContent=msg;
+}
+async function scraperLanzar(ciudad){
+  const btnId=ciudad==='zaragoza'?'btn-zgz':'btn-sev';
+  const btn=document.getElementById(btnId);
+  if(btn){btn.disabled=true;btn.style.opacity='.5';}
+  scraperMostrarEstado(`⟳ Lanzando scraper en ${ciudad.charAt(0).toUpperCase()+ciudad.slice(1)}... abre Chrome solo. Tarda ~50 min.`,null);
+  try{
+    const r=await fetch(`${SCRAPER_SERVER}/lanzar/${ciudad}`,{cache:'no-cache'});
+    const d=await r.json();
+    scraperMostrarEstado(d.ok?`✅ ${d.msg} — recibirás el resultado en Telegram`:`⚠ ${d.msg}`,d.ok);
+  }catch(e){
+    scraperMostrarEstado('⚠ Servidor no responde — abre con INICIAR CENTRO DE MANDO.bat',false);
+  }
+  if(btn){btn.disabled=false;btn.style.opacity='1';}
+}
+async function scraperLanzarCiudad(){
+  const ciudad=(document.getElementById('scraper-ciudad-input')?.value||'').trim();
+  if(!ciudad){toast('⚠ Escribe el nombre de la ciudad');return;}
+  scraperMostrarEstado(`⟳ Lanzando scraper en ${ciudad}...`,null);
+  try{
+    const r=await fetch(`${SCRAPER_SERVER}/lanzar/ciudad?nombre=${encodeURIComponent(ciudad)}`,{cache:'no-cache'});
+    const d=await r.json();
+    scraperMostrarEstado(d.ok?`✅ ${d.msg} — recibirás el resultado en Telegram`:`⚠ ${d.msg}`,d.ok);
+  }catch(e){
+    scraperMostrarEstado('⚠ Servidor no responde — abre con INICIAR CENTRO DE MANDO.bat',false);
+  }
+}
+async function scraperAccion(tipo){
+  const mapaRuta={sheets:'sheets',verificar:'verificar',telegram:'reporte'};
+  const labels={sheets:'Enviando leads a Sheets...',verificar:'Verificando leads activos...',telegram:'Enviando reporte a Telegram...'};
+  scraperMostrarEstado(`⟳ ${labels[tipo]||'...'}`,null);
+  try{
+    const r=await fetch(`${SCRAPER_SERVER}/lanzar/${mapaRuta[tipo]||tipo}`,{cache:'no-cache'});
+    const d=await r.json();
+    scraperMostrarEstado(d.ok?`✅ ${d.msg}`:`⚠ ${d.msg}`,d.ok);
+  }catch(e){
+    scraperMostrarEstado('⚠ Servidor no responde — abre con INICIAR CENTRO DE MANDO.bat',false);
+  }
+}
+
+// ══ INIT ══
+renderHoy();
+renderSeg();
+updateKPIs();
+botRender();
+botStats();
+botRenderNeg();
+renderScripts();
+loadFromSheets();
+fetchVapiBalance();
+carteraKPIs();
+carteraRender();
+carteraLoad();
+checkEstadoSistema();
+adminsRender();
+crmCargar(); crmFiltrar();
+setInterval(checkEstadoSistema, 300000);
+setInterval(fetchVapiBalance, 900000);
+
+// ── MIGRACION DE DATOS (file:// → localhost) ─────────────────────────────────
+function checkBannerMigracion(){
+  // Solo en localhost — en file:// no aplica
+  if(location.hostname !== 'localhost') return;
+  // Si ya migro antes, no mostrar
+  if(localStorage.getItem('migration_done_v12')) return;
+  // Mostrar banner
+  const b = document.getElementById('banner-migracion');
+  if(b) b.style.display='flex';
+}
+
+function cerrarBannerMigracion(){
+  const b = document.getElementById('banner-migracion');
+  if(b) b.style.display='none';
+  localStorage.setItem('migration_done_v12','1');
+}
+
+function exportarDatos(){
+  const KEYS = ['botNums','botNeg','segs','carteraClientes','crm_admins'];
+  const backup = {};
+  KEYS.forEach(k=>{
+    const v = localStorage.getItem(k);
+    if(v) backup[k] = JSON.parse(v);
+  });
+  backup._fecha = new Date().toISOString();
+  backup._origen = location.href;
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fabian-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  toast('Backup descargado — guardalo en un sitio seguro');
+}
+
+function importarDatos(){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if(!file){ toast('Ningún archivo seleccionado'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try{
+        const data = JSON.parse(ev.target.result);
+        let importados = 0;
+        const KEYS = ['botNums','botNeg','segs','carteraClientes','crm_admins'];
+        KEYS.forEach(k=>{
+          if(data[k] !== undefined){
+            localStorage.setItem(k, JSON.stringify(data[k]));
+            importados++;
+          }
+        });
+        toast('✅ ' + importados + ' bloques de datos importados — recarga la pagina');
+        setTimeout(()=>location.reload(), 2000);
+      }catch(err){
+        toast('Error leyendo el archivo: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+checkBannerMigracion();
+</script>
+</body>
+</html>
