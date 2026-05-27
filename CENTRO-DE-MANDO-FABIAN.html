@@ -1565,7 +1565,7 @@ async function botSimRun(lista,idx){
   document.getElementById('bot-prog-msg').textContent='Conectando con Vapi...';
   b.intentos=(b.intentos||0)+1;
   try {
-    const resp=await fetch('https://api.vapi.ai/call',{method:'POST',headers:{'Authorization':'Bearer e6b3d78b-b703-4b0d-86ed-e8b68996caa5','Content-Type':'application/json'},body:JSON.stringify({assistantId:'c8801071-f5ca-468f-962b-e084e716ebaa',phoneNumberId:'ca345c6f-8911-4be3-945d-a6b25b24706d',customer:{number:b.num}})});
+    const resp=await fetch('https://api.vapi.ai/call',{method:'POST',headers:{'Authorization':'Bearer %%VAPI_KEY%%','Content-Type':'application/json'},body:JSON.stringify({assistantId:'c8801071-f5ca-468f-962b-e084e716ebaa',phoneNumberId:'ca345c6f-8911-4be3-945d-a6b25b24706d',customer:{number:b.num}})});
     const data=await resp.json();
     if(resp.ok&&data.id){ b.est='lanzada'; b.fecha=new Date().toLocaleDateString('es-ES'); b.callId=data.id; document.getElementById('bot-prog-msg').textContent=`✓ Llamada lanzada a ${b.num}`; }
     else{ b.est='invalido'; document.getElementById('bot-prog-msg').textContent=`⚠ Error Vapi: ${data.message||JSON.stringify(data)}`; }
@@ -1589,7 +1589,7 @@ async function botSyncResultados(){
   if(!conCallId.length){ toast('⚠ No hay llamadas con ID para sincronizar'); return; }
 
   btn.disabled = true; btn.textContent = '⏳ Sincronizando...';
-  const VAPI_KEY = 'e6b3d78b-b703-4b0d-86ed-e8b68996caa5';
+  const VAPI_KEY = '%%VAPI_KEY%%';
 
   // Mapa Vapi endedReason → estado panel
   const REASON_MAP = {
@@ -1665,7 +1665,7 @@ async function botTestCall(){
   btn.disabled=true; btn.textContent='⏳ Conectando...';
   st.innerHTML='<span style="color:#a78bfa;">Lanzando llamada de prueba...</span>';
   try {
-    const resp=await fetch('https://api.vapi.ai/call',{method:'POST',headers:{'Authorization':'Bearer e6b3d78b-b703-4b0d-86ed-e8b68996caa5','Content-Type':'application/json'},body:JSON.stringify({assistantId:'c8801071-f5ca-468f-962b-e084e716ebaa',phoneNumberId:'ca345c6f-8911-4be3-945d-a6b25b24706d',customer:{number:num}})});
+    const resp=await fetch('https://api.vapi.ai/call',{method:'POST',headers:{'Authorization':'Bearer %%VAPI_KEY%%','Content-Type':'application/json'},body:JSON.stringify({assistantId:'c8801071-f5ca-468f-962b-e084e716ebaa',phoneNumberId:'ca345c6f-8911-4be3-945d-a6b25b24706d',customer:{number:num}})});
     const data=await resp.json();
     if(resp.ok&&data.id){ st.innerHTML=`<span style="color:#4ade80;">✅ Llamando a ${num}</span><br><span style="color:var(--muted);font-size:.67rem;">ID: ${data.id.slice(0,18)}...</span>`; toast(`✅ Llamada lanzada a ${num}`); }
     else st.innerHTML=`<span style="color:#f87171;">⚠ ${data.message||'Error desconocido'}</span>`;
@@ -1867,7 +1867,7 @@ async function carteraAdd(){
 
 // ══ VAPI SALDO ══
 async function fetchVapiBalance(){
-  const TOKEN='e6b3d78b-b703-4b0d-86ed-e8b68996caa5';
+  const TOKEN='%%VAPI_KEY%%';
   const el=document.getElementById('vapiSaldo');
   const icon=document.getElementById('vapi-wallet-icon');
   try{
